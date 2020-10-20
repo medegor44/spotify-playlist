@@ -1,16 +1,17 @@
-import React from "react"
+import React, { useState, useEffect } from "react";
+import { SpotifyUsername } from "./SpotifyUsername";
+import { SpotifyLoginButton } from "./SpotifyLoginButton";
+import { getToken } from "./utils/tokenStorage";
 
 export const SpotifyLogin = () => {
-    const initiateSpotifyLogin = () => {
-        const authUrl =
-            `https://accounts.spotify.com/authorize?` +
-            `response_type=token` +
-            `&client_id=962be0d99c5f4098985705f22c488288` +
-            `&redirect_uri=http://localhost:1234/auth` +
-            `&scope=user-library-read`;
+  const [authenticated, setAuthenticated] = useState(false);
 
-        window.location.href = authUrl;
-    };
+  useEffect(() => {
+    const token = getToken();
 
-    return <button onClick={initiateSpotifyLogin}>Log in to spotify</button>;
-}
+    if (token) setAuthenticated(true);
+  });
+
+  if (authenticated) return <SpotifyUsername />;
+  return <SpotifyLoginButton />;
+};

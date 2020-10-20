@@ -1,35 +1,25 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import queryString from "query-string";
+import { setToken } from "./utils/tokenStorage";
 
-export const SpotifyAuthRedirect = ({ onSuccessfulLogin }) => {
-    const [redirect, setRedirect] = useState(false);
+const getAccessTokenFromLocationHash = (locationHash) => {
+  const parsed = queryString.parse(locationHash);
+  return parsed["access_token"];
+};
 
-    useEffect(() => {
-        const getParams = (url) => {
-            let params = {};
+export const SpotifyAuthRedirect = () => {
+  const [redirect, setRedirect] = useState(false);
+  let history = useHistory();
 
-            const urlParams = new URLSearchParams(url.split("#")[1]);
+  useEffect(() => {
+    const token = getAccessTokenFromLocationHash(window.location.hash);
 
-            for (let par of urlParams.entries())
-                params[par[0]] = par[1];
+    setToken(token);
 
-            return params;
-        };
+    setRedirect(true);
+  }, []);
 
-        const params = getParams(window.location.href);
-        console.log(params);
-        const token = params["access_token"];
-
-        sessionStorage.setItem("token", token);
-
-        console.log(token);
-        setRedirect(true);
-        onSuccessfulLogin();
-    }, []);
-
-    return (
-        <div>
-            {!redirect && <h1>Authenticating</h1>}
-            {redirect && <h1>Authentication successful! Redirecting to your playlists</h1>}
-        </div>
-    );
+  if (redirect) history.push("/");
+  return <h1>Authenticating</h1>;
 };
