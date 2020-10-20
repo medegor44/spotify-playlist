@@ -19,6 +19,8 @@ export const SpotifyAuthRedirect = ({ onSuccessfulLogin }) => {
         console.log(params);
         const token = params["access_token"];
 
+        sessionStorage.setItem("token", token);
+
         console.log(token);
         setRedirect(true);
         onSuccessfulLogin();
