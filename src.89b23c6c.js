@@ -100,4 +100,4 @@ function n(n,t,o,r,e,i,u){try{var c=n[i](u),v=c.value}catch(a){return void o(a)}
 },{"react":"n8MK","react-router-dom":"uc19","./SpotifyLogin":"CmNg","./SpotifyAuthRedirect":"qicH","./SpotifyPlaylists":"ZV7x"}],"deHo":[function(require,module,exports) {
 "use strict";var e=u(require("react")),r=u(require("react-dom")),t=require("./App.jsx");function u(e){return e&&e.__esModule?e:{default:e}}r.default.render(e.default.createElement(t.App,null),document.getElementById("app"));
 },{"react":"n8MK","react-dom":"NKHc","./App.jsx":"DPRK"}]},{},["deHo"], null)
-//# sourceMappingURL=/src.89b23c6c.js.map
+//# sourceMappingURL=/spotify-playlist/src.89b23c6c.js.map
