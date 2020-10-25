@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import { SpotifyLogin } from "./SpotifyLogin";
 import { SpotifyAuthRedirect } from "./SpotifyAuthRedirect";
 import { SpotifyPlaylists } from "./SpotifyPlaylists";
@@ -8,7 +8,7 @@ export const App = () => {
   return (
     <Router>
       <Switch>
-        <Route path="/auth">
+        <Route path="/:access_token(access_token=.*)">
           <SpotifyAuthRedirect />
         </Route>
         <Route path="/">

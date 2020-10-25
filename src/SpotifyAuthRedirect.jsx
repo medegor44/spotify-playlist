@@ -5,7 +5,7 @@ import { setToken } from "./utils/tokenStorage";
 
 const getAccessTokenFromLocationHash = (locationHash) => {
   const parsed = queryString.parse(locationHash);
-  return parsed["access_token"];
+  return parsed["/access_token"];
 };
 
 export const SpotifyAuthRedirect = () => {
