@@ -13,27 +13,66 @@ export const generateAuthUrl = (redirectUri) => {
   return `https://accounts.spotify.com/authorize?${queryStringParams}`;
 };
 
-export const fetchSpotifyUsername = async (token) => {
+export const getAccessTokenFromLocationHash = (locationHash) => {
+  const parsed = queryString.parse(locationHash);
+  return parsed["/access_token"];
+};
+
+export const fetchSpotifyTracksIds = async (token, tracks) => {
+  return Promise.all(tracks.map((track) => fetchSpotifyTrackId(token, track)));
+};
+
+const mapToTrackModel = (spotifyModel, key) => {
+  return { trackId: spotifyModel.id, hasError: false, id: key };
+};
+
+const fetchSpotifyTrackId = async (token, track) => {
+  const param = {
+    q: `artist:${track.artist} track:${track.track}`,
+    type: "track",
+  };
+
+  const url = `${SPOTIFY_BASE_URL}/search?${queryString.stringify(param)}`;
+
   try {
-    const response = await fetch("https://api.spotify.com/v1/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const data = await fetchSpotifyApiData(url, token);
 
-    if (response.status >= 400) return await parseError(response);
-
-    const data = await response.json();
-
-    return { username: data["display_name"] };
+    if (data.tracks.items.length)
+      return mapToTrackModel(data.tracks.items[0], param.q);
+    else return { message: "track not found", hasError: true, id: param.q };
   } catch (e) {
-    return { message: "network error" };
+    return { message: e.message, hasError: true, id: param.q };
   }
 };
 
-const parseError = async (response) => {
+export const fetchSpotifyUsername = async (token) => {
+  const url = `${SPOTIFY_BASE_URL}/me`;
+  try {
+    const data = await fetchSpotifyApiData(url, token);
+
+    return { username: data.display_name, hasError: false };
+  } catch (e) {
+    return { message: e.message, hasError: true };
+  }
+};
+
+const SPOTIFY_BASE_URL = "https://api.spotify.com/v1";
+
+const fetchSpotifyApiData = async (url, token) => {
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
   const data = await response.json();
 
-  if (data["error"]) return { message: data["error"]["message"] };
+  if (response.status >= 400) throw parseError(data);
+
+  return data;
+};
+
+const parseError = (data) => {
+  if (data.error) return { message: data.error.message };
   return null;
 };
