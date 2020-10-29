@@ -14,12 +14,12 @@ export const SpotifyUsername = () => {
     }
 
     const getUserName = async () => {
-      const data = await fetchSpotifyUsername(token);
+      const response = await fetchSpotifyUsername(token);
 
-      const name = data["username"];
-
-      if (name) setUsername(name);
-      else setError(data["message"]);
+      if (!response.hasError) {
+        const name = response.username;
+        setUsername(name);
+      } else setError(response.message);
     };
 
     getUserName();
