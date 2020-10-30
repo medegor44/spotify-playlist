@@ -1,4 +1,4 @@
-export const parseArtistsTracks = (text) => {
+const parseArtistsTracks = (text) => {
   return text.split("\n").map((artistTrackStr) => {
     const splitArtistTrack = artistTrackStr.split(" - ");
 
@@ -11,3 +11,5 @@ export const parseArtistsTracks = (text) => {
     };
   });
 };
+
+export default parseArtistsTracks;

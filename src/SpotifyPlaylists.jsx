@@ -1,3 +1,5 @@
-import React from "react"
+import React from "react";
 
-export const SpotifyPlaylists = () => <h1>Playlists...</h1>
+const SpotifyPlaylists = () => <h1>Playlists...</h1>;
+
+export default SpotifyPlaylists;

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
-import { SpotifyLogin } from "./SpotifyLogin";
-import { SpotifyPlaylists } from "./SpotifyPlaylists";
-import { SpotifySongSearch } from "./SpotifySongSearch";
+import SpotifyLogin from "./SpotifyLogin";
+import SpotifyPlaylists from "./SpotifyPlaylists";
+import SpotifySongSearch from "./SpotifySongSearch";
 import { getToken, setToken } from "./utils/tokenStorage";
 import { getAccessTokenFromLocationHash } from "./utils/spotify";
 
-export const App = () => {
+const App = () => {
   const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
@@ -33,3 +33,5 @@ export const App = () => {
     </Router>
   );
 };
+
+export default App;

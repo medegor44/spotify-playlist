@@ -1,5 +1,7 @@
 import queryString from "query-string";
-import { CLIENT_ID } from "./constants";
+import CLIENT_ID from "./constants";
+
+const SPOTIFY_BASE_URL = "https://api.spotify.com/v1";
 
 export const generateAuthUrl = (redirectUri) => {
   const params = {
@@ -18,8 +20,23 @@ export const getAccessTokenFromLocationHash = (locationHash) => {
   return parsed["/access_token"];
 };
 
-export const fetchSpotifyTracksIds = async (token, tracks) => {
-  return Promise.all(tracks.map((track) => fetchSpotifyTrackId(token, track)));
+const parseError = (data) => {
+  if (data.error) return { message: data.error.message };
+  return null;
+};
+
+const fetchSpotifyApiData = async (url, token) => {
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  if (response.status >= 400) throw parseError(data);
+
+  return data;
 };
 
 const mapToTrackModel = (spotifyModel, key) => {
@@ -39,10 +56,14 @@ const fetchSpotifyTrackId = async (token, track) => {
 
     if (data.tracks.items.length)
       return mapToTrackModel(data.tracks.items[0], param.q);
-    else return { message: "track not found", hasError: true, id: param.q };
+    return { message: "track not found", hasError: true, id: param.q };
   } catch (e) {
     return { message: e.message, hasError: true, id: param.q };
   }
+};
+
+export const fetchSpotifyTracksIds = async (token, tracks) => {
+  return Promise.all(tracks.map((track) => fetchSpotifyTrackId(token, track)));
 };
 
 export const fetchSpotifyUsername = async (token) => {
@@ -54,25 +75,4 @@ export const fetchSpotifyUsername = async (token) => {
   } catch (e) {
     return { message: e.message, hasError: true };
   }
-};
-
-const SPOTIFY_BASE_URL = "https://api.spotify.com/v1";
-
-const fetchSpotifyApiData = async (url, token) => {
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  const data = await response.json();
-
-  if (response.status >= 400) throw parseError(data);
-
-  return data;
-};
-
-const parseError = (data) => {
-  if (data.error) return { message: data.error.message };
-  return null;
 };

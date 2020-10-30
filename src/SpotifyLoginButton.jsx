@@ -1,11 +1,17 @@
 import React from "react";
 import { generateAuthUrl } from "./utils/spotify";
 
-export const SpotifyLoginButton = () => {
+const SpotifyLoginButton = () => {
   const initiateSpotifyLogin = () => {
     const url = window.location.href.split("?")[0];
     window.location.href = generateAuthUrl(url);
   };
 
-  return <button onClick={initiateSpotifyLogin}>Log in to spotify</button>;
+  return (
+    <button type="button" onClick={initiateSpotifyLogin}>
+      Log in to spotify
+    </button>
+  );
 };
+
+export default SpotifyLoginButton;

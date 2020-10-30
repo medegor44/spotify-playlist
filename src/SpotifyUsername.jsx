@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { fetchSpotifyUsername } from "./utils/spotify";
 import { getToken } from "./utils/tokenStorage";
 
-export const SpotifyUsername = () => {
+const SpotifyUsername = () => {
   const [username, setUsername] = useState("");
   const [error, setError] = useState("");
 
@@ -31,3 +31,5 @@ export const SpotifyUsername = () => {
 
   return <h1>Loading...</h1>;
 };
+
+export default SpotifyUsername;

@@ -1,27 +1,11 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { getToken } from "./utils/tokenStorage";
 import { fetchSpotifyTracksIds } from "./utils/spotify";
-import { parseArtistsTracks } from "./utils/parser";
+import parseArtistsTracks from "./utils/parser";
+import ResponsesView from "./ResponsesView";
 
-const TrackView = ({ track }) => {
-  return <li>{track.trackId}</li>;
-};
-
-const ErrorView = ({ error }) => {
-  return <li>There was an error: {error.message}</li>;
-};
-
-const ResponsesView = ({ responses }) => {
-  const views = responses.map((response) => {
-    if (!response.hasError)
-      return <TrackView track={response} key={response.id} />;
-    return <ErrorView error={response} key={response.id} />;
-  });
-
-  return <ul>{views}</ul>;
-};
-
-export const SpotifySongSearch = ({ authorized }) => {
+const SpotifySongSearch = ({ authorized }) => {
   const [responses, setResponses] = useState([]);
   const [rawText, setRawText] = useState("");
   const [isFetching, setIsFetching] = useState(false);
@@ -46,7 +30,9 @@ export const SpotifySongSearch = ({ authorized }) => {
   return (
     <div>
       <textarea onChange={handleTracksChange} value={rawText} />
-      <button onClick={handleClick}>Search</button>
+      <button type="button" onClick={handleClick}>
+        Search
+      </button>
       {isFetching ? (
         <p>Fetching...</p>
       ) : (
@@ -55,3 +41,13 @@ export const SpotifySongSearch = ({ authorized }) => {
     </div>
   );
 };
+
+SpotifySongSearch.propTypes = {
+  authorized: PropTypes.bool,
+};
+
+SpotifySongSearch.defaultProps = {
+  authorized: false,
+};
+
+export default SpotifySongSearch;

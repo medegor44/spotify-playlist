@@ -1,1 +1,3 @@
-export const CLIENT_ID = "962be0d99c5f4098985705f22c488288";
+const CLIENT_ID = "962be0d99c5f4098985705f22c488288";
+
+export default CLIENT_ID;
