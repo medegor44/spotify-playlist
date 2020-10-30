@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "parcel src/index.html",
-    "build": "parcel build src/index.html --public-url /spotify-playlist",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run linter && parcel src/index.html",
+    "build": "npm run linter && parcel build src/index.html --public-url /spotify-playlist",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "linter": "npx eslint ./src"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +21,8 @@
     "@babel/core": "^7.12.0",
     "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-react": "^7.10.4",
+    "eslint": "^7.12.1",
+    "eslint-plugin-react": "^7.21.5",
     "parcel-bundler": "^1.12.4"
   }
 }
