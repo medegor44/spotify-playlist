@@ -1,0 +1,43 @@
+.responseContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.trackContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    height: 10em;
+    margin-top: 2%;
+    flex-wrap: nowrap;
+
+    background-color: lightgreen;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+}
+
+.albumCover {
+    margin: 0.5em;
+    height: 90%;
+    width: auto;
+}
+
+.errorIndicator {
+    background-color: lightcoral;
+}
+
+.idx {
+    margin: 0.5em;
+    max-width: 5%;
+    min-width: 5%;
+    width: 5%;
+}
+
+.trackDataContainer {
+    margin-right: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}

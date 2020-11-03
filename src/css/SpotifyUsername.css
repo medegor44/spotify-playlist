@@ -1,0 +1,21 @@
+.imageCropper {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 100%;
+}
+
+.profileImg {
+    position: relative;
+    left: -25%;
+    height: 100%;
+    width: auto;
+}
+
+.profileContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    margin-left: 10%;
+}

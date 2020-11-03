@@ -4,6 +4,7 @@ import { getToken } from "./utils/tokenStorage";
 import { fetchSpotifyTracksIds } from "./utils/spotify";
 import parseArtistsTracks from "./utils/parser";
 import ResponsesView from "./ResponsesView";
+import "./css/SpotifySongSearch.css";
 
 const SpotifySongSearch = ({ authorized }) => {
   const [responses, setResponses] = useState([]);
@@ -28,9 +29,14 @@ const SpotifySongSearch = ({ authorized }) => {
   if (!authorized) return <h1>Waiting for authorization</h1>;
 
   return (
-    <div>
-      <textarea onChange={handleTracksChange} value={rawText} />
-      <button type="button" onClick={handleClick}>
+    <div className="searchContainer">
+      <p>Enter track list (in &quot;artist&quot; - &quot;title&quot; format)</p>
+      <textarea
+        className="searchBox"
+        onChange={handleTracksChange}
+        value={rawText}
+      />
+      <button className="searchButton" type="button" onClick={handleClick}>
         Search
       </button>
       {isFetching ? (

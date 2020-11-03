@@ -5,6 +5,7 @@ import SpotifyPlaylists from "./SpotifyPlaylists";
 import SpotifySongSearch from "./SpotifySongSearch";
 import { getToken, setToken } from "./utils/tokenStorage";
 import { getAccessTokenFromLocationHash } from "./utils/spotify";
+import "./css/App.css";
 
 const App = () => {
   const [authorized, setAuthorized] = useState(false);
@@ -25,9 +26,14 @@ const App = () => {
     <Router>
       <Switch>
         <Route path="/">
-          <SpotifyLogin authorized={authorized} />
-          <SpotifySongSearch authorized={authorized} />
-          <SpotifyPlaylists />
+          <div className="container">
+            <div className="headContainer">
+              <h1>Spotify playlist generator</h1>
+              <SpotifyLogin authorized={authorized} />
+            </div>
+            <SpotifySongSearch authorized={authorized} />
+            <SpotifyPlaylists />
+          </div>
         </Route>
       </Switch>
     </Router>

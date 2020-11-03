@@ -40,7 +40,16 @@ const fetchSpotifyApiData = async (url, token) => {
 };
 
 const mapToTrackModel = (spotifyModel, key) => {
-  return { trackId: spotifyModel.id, hasError: false, id: key };
+  return {
+    trackId: spotifyModel.id,
+    albumCover: spotifyModel.album.images[0].url,
+    artist: spotifyModel.artists[0].name,
+    album: spotifyModel.album.name,
+    name: spotifyModel.name,
+    duration: spotifyModel.duration_ms,
+    hasError: false,
+    id: key,
+  };
 };
 
 const fetchSpotifyTrackId = async (token, track) => {
@@ -66,12 +75,20 @@ export const fetchSpotifyTracksIds = async (token, tracks) => {
   return Promise.all(tracks.map((track) => fetchSpotifyTrackId(token, track)));
 };
 
+const mapToUserModel = (spotifyModel) => {
+  return {
+    username: spotifyModel.display_name,
+    profileImage: spotifyModel.images ? spotifyModel.images[0].url : "",
+    hasError: false,
+  };
+};
+
 export const fetchSpotifyUsername = async (token) => {
   const url = `${SPOTIFY_BASE_URL}/me`;
   try {
     const data = await fetchSpotifyApiData(url, token);
 
-    return { username: data.display_name, hasError: false };
+    return mapToUserModel(data);
   } catch (e) {
     return { message: e.message, hasError: true };
   }
