@@ -25,17 +25,26 @@ const SpotifyUsername = () => {
     getUserName();
   }, []);
 
-  if (error) return <h1>Error occurred while fetching name: {error}</h1>;
+  if (error)
+    return (
+      <div className="profileContainer">
+        <p>Error occurred while fetching name: {error}</p>
+      </div>
+    );
 
   if (user)
     return (
       <div className="profileContainer">
         <div className="imageCropper">
-          <img
-            className="profileImg"
-            src={user.profileImage}
-            alt="your profile pic"
-          />
+          {user.profileImage ? (
+            <img
+              className="profileImg"
+              src={user.profileImage}
+              alt="your profile pic"
+            />
+          ) : (
+            <h1 className="profileLetter">{user.username[0]}</h1>
+          )}
         </div>
         <p>Hello, {user.username}</p>
       </div>

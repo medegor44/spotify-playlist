@@ -78,7 +78,7 @@ export const fetchSpotifyTracksIds = async (token, tracks) => {
 const mapToUserModel = (spotifyModel) => {
   return {
     username: spotifyModel.display_name,
-    profileImage: spotifyModel.images ? spotifyModel.images[0].url : "",
+    profileImage: spotifyModel.images.length ? spotifyModel.images[0].url : "",
     hasError: false,
   };
 };

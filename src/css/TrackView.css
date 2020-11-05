@@ -1,6 +1,7 @@
 .responseContainer {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .trackContainer {
@@ -28,7 +29,7 @@
     background-color: lightcoral;
 }
 
-.idx {
+.trackPosition {
     margin: 0.5em;
     max-width: 5%;
     min-width: 5%;

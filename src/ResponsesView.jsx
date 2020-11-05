@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
+import { fromS } from "hh-mm-ss";
 import "./css/TrackView.css";
 
 const trackType = PropTypes.shape({
@@ -21,26 +22,18 @@ const errorType = PropTypes.shape({
 
 const responsesType = PropTypes.oneOfType([trackType, errorType]);
 
-const parseDuration = (durationInMs) => {
-  const durationInSec = Math.floor(durationInMs / 1000);
-  const minutes = Math.floor(durationInSec / 60);
-  const seconds = durationInSec % 60;
-
-  return `${minutes}:${seconds}`;
-};
-
 const TrackView = ({ track, idx }) => {
-  const durationStr = parseDuration(track.duration);
+  const durationInSec = Math.floor(track.duration / 1000);
   return (
     <div className="trackContainer">
-      <h1 className="idx">{idx}</h1>
+      <h1 className="trackPosition">{idx + 1}</h1>
       <img className="albumCover" src={track.albumCover} alt="" />
       <div className="trackDataContainer">
         <p>{track.artist}</p>
         <p>{track.name}</p>
       </div>
       <p className="trackDataContainer">{track.album}</p>
-      <p className="trackDataContainer">{durationStr}</p>
+      <p className="trackDataContainer">{fromS(durationInSec, "mm:ss")}</p>
     </div>
   );
 };
@@ -58,7 +51,7 @@ TrackView.defaultProps = {
 const ErrorView = ({ error, idx }) => {
   return (
     <div className="trackContainer errorIndicator" color="red">
-      <h1 className="idx">{idx}</h1>
+      <h1 className="trackPosition">{idx + 1}</h1>
       <p>There was an error: {error.message}</p>
     </div>
   );
@@ -77,8 +70,8 @@ ErrorView.defaultProps = {
 const ResponsesView = ({ responses }) => {
   const views = responses.map((response, idx) => {
     if (!response.hasError)
-      return <TrackView track={response} idx={idx + 1} key={response.id} />;
-    return <ErrorView error={response} idx={idx + 1} key={response.id} />;
+      return <TrackView track={response} idx={idx} key={response.id} />;
+    return <ErrorView error={response} idx={idx} key={response.id} />;
   });
 
   return <div className="responseContainer">{views}</div>;
