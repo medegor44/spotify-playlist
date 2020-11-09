@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "hh-mm-ss": "^1.2.0",
     "prop-types": "^15.7.2",
     "query-string": "^6.13.6",
     "react": "^16.14.0",

@@ -1,0 +1,27 @@
+.imageCropper {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 100%;
+    background-color: lightgoldenrodyellow;
+}
+
+.profileImg {
+    position: relative;
+    left: -25%;
+    height: 100%;
+    width: auto;
+}
+
+.profileLetter {
+    margin-top: 25%;
+    text-align: center;
+}
+
+.profileContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    margin-left: 5%;
+}

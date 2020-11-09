@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { fetchSpotifyUsername } from "./utils/spotify";
 import { getToken } from "./utils/tokenStorage";
+import "./css/SpotifyUsername.css";
 
 const SpotifyUsername = () => {
-  const [username, setUsername] = useState("");
+  const [user, setUser] = useState(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -17,17 +18,37 @@ const SpotifyUsername = () => {
       const response = await fetchSpotifyUsername(token);
 
       if (!response.hasError) {
-        const name = response.username;
-        setUsername(name);
+        setUser(response);
       } else setError(response.message);
     };
 
     getUserName();
   }, []);
 
-  if (error) return <h1>Error occurred while fetching name: {error}</h1>;
+  if (error)
+    return (
+      <div className="profileContainer">
+        <p>Error occurred while fetching name: {error}</p>
+      </div>
+    );
 
-  if (username) return <h1>Hello, {username}</h1>;
+  if (user)
+    return (
+      <div className="profileContainer">
+        <div className="imageCropper">
+          {user.profileImage ? (
+            <img
+              className="profileImg"
+              src={user.profileImage}
+              alt="your profile pic"
+            />
+          ) : (
+            <h1 className="profileLetter">{user.username[0]}</h1>
+          )}
+        </div>
+        <p>Hello, {user.username}</p>
+      </div>
+    );
 
   return <h1>Loading...</h1>;
 };
