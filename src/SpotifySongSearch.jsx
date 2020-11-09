@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { getToken } from "./utils/tokenStorage";
 import { fetchSpotifyTracksIds } from "./utils/spotify";
 import parseArtistsTracks from "./utils/parser";
 import ResponsesView from "./ResponsesView";
 import "./css/SpotifySongSearch.css";
+
+const TRACKS_KEY = "tracks";
 
 const SpotifySongSearch = ({ authorized }) => {
   const [responses, setResponses] = useState([]);
@@ -16,8 +18,8 @@ const SpotifySongSearch = ({ authorized }) => {
     setRawText(text);
   };
 
-  const handleClick = async () => {
-    const tracks = parseArtistsTracks(rawText);
+  const performRequest = async (artistsTracksText) => {
+    const tracks = parseArtistsTracks(artistsTracksText);
     setIsFetching(true);
 
     const trackResponses = await fetchSpotifyTracksIds(getToken(), tracks);
@@ -25,6 +27,19 @@ const SpotifySongSearch = ({ authorized }) => {
     setIsFetching(false);
     setResponses(trackResponses);
   };
+
+  const handleClick = () => {
+    localStorage.setItem(TRACKS_KEY, rawText);
+    performRequest(rawText);
+  };
+
+  useEffect(() => {
+    if (!authorized) return;
+
+    const text = localStorage.getItem(TRACKS_KEY);
+    setRawText(text);
+    performRequest(text);
+  }, [authorized]);
 
   if (!authorized) return <h1>Waiting for authorization</h1>;
 
