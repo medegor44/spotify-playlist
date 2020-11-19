@@ -1,45 +1,46 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { getToken } from "./utils/tokenStorage";
-import { fetchSpotifyTracksIds } from "./utils/spotify";
+import { fetchTracks } from "./utils/spotify";
 import parseArtistsTracks from "./utils/parser";
 import ResponsesView from "./ResponsesView";
 import "./css/SpotifySongSearch.css";
-
-const TRACKS_KEY = "tracks";
+import CreatePlaylistButton from "./CreatePlaylistButton";
+import UserContext from "./contexts/UserContext";
+import { setTracks, getTracks } from "./utils/tracksStorage";
 
 const SpotifySongSearch = ({ authorized }) => {
   const [responses, setResponses] = useState([]);
   const [rawText, setRawText] = useState("");
   const [isFetching, setIsFetching] = useState(false);
+  const userData = useContext(UserContext);
 
   const handleTracksChange = (event) => {
     const text = event.target.value;
     setRawText(text);
   };
 
-  const performRequest = async (artistsTracksText) => {
+  const performRequest = async (artistsTracksText, token) => {
     const tracks = parseArtistsTracks(artistsTracksText);
     setIsFetching(true);
 
-    const trackResponses = await fetchSpotifyTracksIds(getToken(), tracks);
+    const trackResponses = await fetchTracks(token, tracks);
 
     setIsFetching(false);
     setResponses(trackResponses);
   };
 
   const handleClick = () => {
-    localStorage.setItem(TRACKS_KEY, rawText);
-    performRequest(rawText);
+    setTracks(rawText);
+    performRequest(rawText, userData.token);
   };
 
   useEffect(() => {
-    if (!authorized) return;
+    if (!authorized || !userData) return;
 
-    const text = localStorage.getItem(TRACKS_KEY);
+    const text = getTracks();
     setRawText(text);
-    performRequest(text);
-  }, [authorized]);
+    performRequest(text, userData.token);
+  }, [authorized, userData]);
 
   if (!authorized) return <h1>Waiting for authorization</h1>;
 
@@ -59,6 +60,11 @@ const SpotifySongSearch = ({ authorized }) => {
       ) : (
         <ResponsesView responses={responses} />
       )}
+      <CreatePlaylistButton
+        tracksUris={responses
+          .filter((response) => !response.hasError)
+          .map((track) => track.trackUri)}
+      />
     </div>
   );
 };
