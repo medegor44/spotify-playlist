@@ -48,7 +48,7 @@ export const createPlaylist = async (token, userId, playlistName) => {
     url,
     token,
     "POST",
-    JSON.stringify({ name: playlistName })
+    JSON.stringify({ name: playlistName, public: false })
   );
 };
 

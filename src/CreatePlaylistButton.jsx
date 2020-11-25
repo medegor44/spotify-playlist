@@ -7,7 +7,7 @@ const CreatePlaylistButton = ({ tracksUris }) => {
   const [playlistName, setName] = useState("");
   const userData = useContext(UserContext);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState("");
 
   const handleButtonClick = async () => {
     const data = await createPlaylist(
@@ -20,15 +20,11 @@ const CreatePlaylistButton = ({ tracksUris }) => {
 
     try {
       await addTracksToPlaylist(userData.token, playlistId, tracksUris);
-      setSuccess(true);
+      setSuccess(`${playlistName} created`);
     } catch (e) {
-      setError(e.message);
+      setError(`There was an error: ${e.message}`);
     }
   };
-
-  let message = null;
-  if (success) message = <p>{playlistName} created</p>;
-  if (error) message = <p>There was an error: {error}</p>;
 
   return (
     <div>
@@ -42,7 +38,7 @@ const CreatePlaylistButton = ({ tracksUris }) => {
       <button type="button" onClick={handleButtonClick}>
         Create playlist
       </button>
-      {message}
+      <Message error={error} success={success} />
     </div>
   );
 };
@@ -53,6 +49,22 @@ CreatePlaylistButton.propTypes = {
 
 CreatePlaylistButton.defaultProps = {
   tracksUris: [],
+};
+
+const Message = ({ error, success }) => {
+  if (success) return <p>{success}</p>;
+  if (error) return <p>{error}</p>;
+  return null;
+};
+
+Message.propTypes = {
+  error: PropTypes.string,
+  success: PropTypes.string,
+};
+
+Message.defaultProps = {
+  error: "",
+  success: "",
 };
 
 export default CreatePlaylistButton;

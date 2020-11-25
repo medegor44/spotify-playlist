@@ -1,39 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import SpotifyLogin from "./SpotifyLogin";
 import SpotifyPlaylists from "./SpotifyPlaylists";
 import SpotifySongSearch from "./SpotifySongSearch";
-import { getToken, setToken } from "./utils/tokenStorage";
-import { getAccessTokenFromLocationHash, fetchUser } from "./utils/spotify";
 import "./css/App.css";
 import UserContext from "./contexts/UserContext";
+import useAuthorization from "./hooks/useAuthorization";
 
 const App = () => {
-  const [authorized, setAuthorized] = useState(false);
-  const [userData, setUserData] = useState(null);
-
-  useEffect(() => {
-    const authorize = async () => {
-      if (!getToken()) {
-        const token = getAccessTokenFromLocationHash(window.location.hash);
-        if (!token) return;
-        setToken(token);
-      }
-
-      const token = getToken();
-      setAuthorized(true);
-
-      const user = await fetchUser(`${token}`);
-
-      if (user.hasError) {
-        setAuthorized(false);
-        return;
-      }
-      setUserData({ token, ...user });
-    };
-
-    authorize();
-  }, []);
+  const { userData, authorized } = useAuthorization();
 
   return (
     <Router>
