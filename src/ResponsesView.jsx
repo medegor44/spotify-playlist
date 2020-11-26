@@ -4,7 +4,7 @@ import { fromS } from "hh-mm-ss";
 import "./css/TrackView.css";
 
 const trackType = PropTypes.shape({
-  trackId: PropTypes.string,
+  trackUri: PropTypes.string,
   artist: PropTypes.string,
   name: PropTypes.string,
   album: PropTypes.string,
