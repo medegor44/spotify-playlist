@@ -1,21 +1,13 @@
-.imageCropper {
-    width: 100px;
-    height: 100px;
-    overflow: hidden;
+.rounded {
     border-radius: 100%;
-    background-color: lightgoldenrodyellow;
-}
-
-.profileImg {
-    position: relative;
-    left: -25%;
-    height: 100%;
-    width: auto;
+    height: 70px;
+    width: 70px;
 }
 
 .profileLetter {
-    margin-top: 25%;
+    background-color: lightgoldenrodyellow;
     text-align: center;
+    margin: 0;
 }
 
 .profileContainer {
@@ -24,4 +16,9 @@
     align-items: center;
     justify-content: space-around;
     margin-left: 5%;
+}
+
+.centerСropped {
+    overflow: hidden;
+    object-fit: cover;
 }

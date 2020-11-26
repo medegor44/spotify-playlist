@@ -26,17 +26,15 @@ const SpotifyUsername = () => {
   if (user)
     return (
       <div className="profileContainer">
-        <div className="imageCropper">
-          {user.profileImage ? (
-            <img
-              className="profileImg"
-              src={user.profileImage}
-              alt="your profile pic"
-            />
-          ) : (
-            <h1 className="profileLetter">{user.username[0]}</h1>
-          )}
-        </div>
+        {user.profileImage ? (
+          <img
+            src={user.profileImage}
+            className="centerСropped rounded"
+            alt=""
+          />
+        ) : (
+          <h1 className="profileLetter rounded">{user.username[0]}</h1>
+        )}
         <p>Hello, {user.username}</p>
       </div>
     );
