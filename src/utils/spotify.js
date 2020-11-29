@@ -62,7 +62,7 @@ const mapToTrackModel = (spotifyModel, key) => {
   return {
     trackUri: spotifyModel.uri,
     albumCover: spotifyModel.album.images[0].url,
-    artist: spotifyModel.artists[0].name,
+    artists: spotifyModel.artists.map((artist) => artist.name),
     album: spotifyModel.album.name,
     name: spotifyModel.name,
     duration: spotifyModel.duration_ms,
@@ -73,7 +73,7 @@ const mapToTrackModel = (spotifyModel, key) => {
 
 const fetchTrack = async (token, track) => {
   const param = {
-    q: `artist:${track.artist} track:${track.track}`,
+    q: `artist:${track.artists} track:${track.track}`,
     type: "track",
   };
 

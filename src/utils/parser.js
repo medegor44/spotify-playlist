@@ -6,10 +6,10 @@ const parseArtistsTracks = (text) => {
       const splitArtistTrack = artistTrackStr.split(" - ");
 
       if (splitArtistTrack.length < 2)
-        return { artist: splitArtistTrack[0].trim(), track: "" };
+        return { artists: splitArtistTrack[0].trim(), track: "" };
 
       return {
-        artist: splitArtistTrack[0].trim(),
+        artists: splitArtistTrack[0].trim(),
         track: splitArtistTrack[1].trim(),
       };
     });
