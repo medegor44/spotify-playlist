@@ -98,7 +98,7 @@ function n(n,t,o,r,e,i,u){try{var c=n[i](u),v=c.value}catch(a){return void o(a)}
 },{"react":"n8MK"}],"IxO8":[function(require,module,exports) {
 function e(e,r,n){return r in e?Object.defineProperty(e,r,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[r]=n,e}module.exports=e;
 },{}],"FTwz":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var t=function(t){return t.split("\n").filter(function(t){return t.trim().length}).map(function(t){var r=t.split(" - ");if(r.length<2)return{artist:r[0].trim(),track:""};var e=r[0].trim().split(", ").length>1;return{trackData:{artist:r[0].trim(),track:r[1].trim()},moreThanOneArtist:e}})},r=t;exports.default=r;
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var t=function(t){return t.split("\n").filter(function(t){return t.trim().length}).map(function(t){var r=t.split(" - ");if(r.length<2)return{artist:r[0].trim(),track:""};var e=r[0].indexOf(",")>-1;return{trackData:{artist:r[0].trim(),track:r[1].trim()},moreThanOneArtist:e}})},r=t;exports.default=r;
 },{}],"QPiT":[function(require,module,exports) {
 module.exports=function n(t,o,r){return void 0===o?function(o,r){return n(t,o,r)}:(void 0===r&&(r="0"),(t-=o.toString().length)>0?new Array(t+(/\./.test(o)?2:1)).join(r)+o:o+"")};
 },{}],"guNG":[function(require,module,exports) {
@@ -120,4 +120,4 @@ module.exports=function n(t,o,r){return void 0===o?function(o,r){return n(t,o,r)
 },{"react":"n8MK","react-router-dom":"uc19","./SpotifyLogin":"CmNg","./SpotifyPlaylists":"ZV7x","./SpotifySongSearch":"LC9Y","./css/App.css":"YqNb","./contexts/UserContext":"gYjN","./hooks/useAuthorization":"gSuD"}],"deHo":[function(require,module,exports) {
 "use strict";var e=u(require("react")),r=u(require("react-dom")),t=u(require("./App"));function u(e){return e&&e.__esModule?e:{default:e}}r.default.render(e.default.createElement(t.default,null),document.getElementById("app"));
 },{"react":"n8MK","react-dom":"NKHc","./App":"DPRK"}]},{},["deHo"], null)
-//# sourceMappingURL=/spotify-playlist/src.396b05e1.js.map
+//# sourceMappingURL=/spotify-playlist/src.feef151c.js.map
