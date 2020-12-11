@@ -10,8 +10,8 @@ const trackType = PropTypes.shape({
   album: PropTypes.string,
   albumCover: PropTypes.string,
   hasError: PropTypes.bool,
-  id: PropTypes.string,
   duration: PropTypes.number,
+  id: PropTypes.string,
 });
 
 const errorType = PropTypes.shape({

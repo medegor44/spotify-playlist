@@ -58,7 +58,7 @@ export const addTracksToPlaylist = async (token, playlistId, trackUris) => {
   return requestToApi(url, token, "POST", JSON.stringify({ uris: trackUris }));
 };
 
-const mapToTrackModel = (spotifyModel, key) => {
+const mapToTrackModel = (spotifyModel) => {
   return {
     trackUri: spotifyModel.uri,
     albumCover: spotifyModel.album.images[0].url,
@@ -67,7 +67,6 @@ const mapToTrackModel = (spotifyModel, key) => {
     name: spotifyModel.name,
     duration: spotifyModel.duration_ms,
     hasError: false,
-    id: key,
   };
 };
 
@@ -82,11 +81,13 @@ const fetchTrack = async (token, track) => {
   try {
     const data = await requestToApi(url, token);
 
-    if (data.tracks.items.length)
-      return mapToTrackModel(data.tracks.items[0], param.q);
-    return { message: "track not found", hasError: true, id: param.q };
+    if (data.tracks.items.length) return mapToTrackModel(data.tracks.items[0]);
+    return {
+      message: "track not found",
+      hasError: true,
+    };
   } catch (e) {
-    return { message: e.message, hasError: true, id: param.q };
+    return { message: e.message, hasError: true };
   }
 };
 
