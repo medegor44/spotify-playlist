@@ -5,7 +5,7 @@ import "./css/TrackView.css";
 
 const trackType = PropTypes.shape({
   trackUri: PropTypes.string,
-  artist: PropTypes.string,
+  artists: PropTypes.arrayOf(PropTypes.string),
   name: PropTypes.string,
   album: PropTypes.string,
   albumCover: PropTypes.string,
@@ -24,12 +24,14 @@ const responsesType = PropTypes.oneOfType([trackType, errorType]);
 
 const TrackView = ({ track, idx }) => {
   const durationInSec = Math.floor(track.duration / 1000);
+  const artists = track.artists.join(", ");
+
   return (
     <div className="trackContainer">
       <h1 className="trackPosition">{idx + 1}</h1>
       <img className="albumCover" src={track.albumCover} alt="" />
       <div className="trackDataContainer">
-        <p>{track.artist}</p>
+        <p>{artists}</p>
         <p>{track.name}</p>
       </div>
       <p className="trackDataContainer">{track.album}</p>
