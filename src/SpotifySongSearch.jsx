@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import shortid from "shortid";
 import { fetchTracks } from "./utils/spotify";
 import parseArtistsTracks from "./utils/parser";
 import ResponsesView from "./ResponsesView";
@@ -23,7 +24,11 @@ const SpotifySongSearch = ({ authorized }) => {
     const tracks = parseArtistsTracks(artistsTracksText);
     setIsFetching(true);
 
-    const trackResponses = await fetchTracks(token, tracks);
+    const trackResponses = (await fetchTracks(token, tracks)).map(
+      (response, idx) => {
+        return { ...response, id: `${shortid.generate()} ${idx}` };
+      }
+    );
 
     setIsFetching(false);
     setResponses(trackResponses);
