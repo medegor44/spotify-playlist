@@ -55,7 +55,22 @@ export const createPlaylist = async (token, userId, playlistName) => {
 export const addTracksToPlaylist = async (token, playlistId, trackUris) => {
   const url = `${SPOTIFY_BASE_URL}/playlists/${playlistId}/tracks`;
 
-  return requestToApi(url, token, "POST", JSON.stringify({ uris: trackUris }));
+  const limit = 100;
+  const responses = [];
+  const len = trackUris.length;
+
+  for (let i = 0; i < len; i += limit) {
+    const response = requestToApi(
+      url,
+      token,
+      "POST",
+      JSON.stringify({ uris: trackUris.slice(i, i + limit) })
+    );
+
+    responses.push(response);
+  }
+
+  return Promise.all(responses);
 };
 
 const mapToTrackModel = (spotifyModel) => {
