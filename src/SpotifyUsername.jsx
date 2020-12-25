@@ -16,12 +16,7 @@ const SpotifyUsername = () => {
     if (user.hasError) setError(user.message);
   }, [user]);
 
-  if (error)
-    return (
-      <div className="profileContainer">
-        <p>Error occurred while fetching name: {error}</p>
-      </div>
-    );
+  if (error) return <p>Error occurred while fetching name: {error}</p>;
 
   if (user)
     return (
@@ -35,7 +30,7 @@ const SpotifyUsername = () => {
         ) : (
           <h1 className="profileLetter rounded">{user.username[0]}</h1>
         )}
-        <p>Hello, {user.username}</p>
+        <span className="username">{user.username}</span>
       </div>
     );
 

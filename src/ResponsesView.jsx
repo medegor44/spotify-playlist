@@ -76,7 +76,12 @@ const ResponsesView = ({ responses }) => {
     return <ErrorView error={response} idx={idx} key={response.id} />;
   });
 
-  return <div className="responseContainer">{views}</div>;
+  return (
+    <>
+      <h3 className="major">Resolved Spotify tracks</h3>
+      <div className="sectionContentContainer responseContainer">{views}</div>
+    </>
+  );
 };
 
 ResponsesView.propTypes = {

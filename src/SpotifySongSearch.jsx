@@ -50,27 +50,40 @@ const SpotifySongSearch = ({ authorized }) => {
   if (!authorized) return <h1>Waiting for authorization</h1>;
 
   return (
-    <div className="searchContainer">
-      <p>Enter track list (in &quot;artist&quot; - &quot;title&quot; format)</p>
-      <textarea
-        className="searchBox"
-        onChange={handleTracksChange}
-        value={rawText}
-      />
-      <button className="searchButton" type="button" onClick={handleClick}>
-        Search
-      </button>
-      {isFetching ? (
-        <p>Fetching...</p>
-      ) : (
-        <ResponsesView responses={responses} />
-      )}
-      <CreatePlaylistButton
-        tracksUris={responses
-          .filter((response) => !response.hasError)
-          .map((track) => track.trackUri)}
-      />
-    </div>
+    <>
+      <section>
+        <h3 className="major">Enter track list</h3>
+        <div className="sectionContentContainer">
+          <textarea
+            className="searchBox"
+            placeholder='Enter you playlist items in "artist - title" format'
+            onChange={handleTracksChange}
+            value={rawText}
+          />
+          <button
+            className="searchButton button primary"
+            type="button"
+            onClick={handleClick}
+          >
+            Search
+          </button>
+        </div>
+      </section>
+      <section>
+        {isFetching ? (
+          <p>Fetching...</p>
+        ) : (
+          <ResponsesView responses={responses} />
+        )}
+      </section>
+      <section>
+        <CreatePlaylistButton
+          tracksUris={responses
+            .filter((response) => !response.hasError)
+            .map((track) => track.trackUri)}
+        />
+      </section>
+    </>
   );
 };
 

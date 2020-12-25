@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import UserContext from "./contexts/UserContext";
 import { addTracksToPlaylist, createPlaylist } from "./utils/spotify";
+import "./css/CreatePlaylistButton.css";
 
 const CreatePlaylistButton = ({ tracksUris }) => {
   const [playlistName, setName] = useState("");
@@ -27,19 +28,28 @@ const CreatePlaylistButton = ({ tracksUris }) => {
   };
 
   return (
-    <div>
-      <input
-        type="text"
-        value={playlistName}
-        onChange={(e) => {
-          setName(e.target.value);
-        }}
-      />
-      <button type="button" onClick={handleButtonClick}>
-        Create playlist
-      </button>
-      <Message error={error} success={success} />
-    </div>
+    <>
+      <h3 className="major">Generate playlist</h3>
+      <div className="sectionContentContainer createplaylist">
+        <input
+          type="text"
+          className="playlistname"
+          placeholder="Enter playlist name"
+          value={playlistName}
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
+        />
+        <button
+          className="playlistbutton"
+          type="button"
+          onClick={handleButtonClick}
+        >
+          Create playlist
+        </button>
+        <Message error={error} success={success} />
+      </div>
+    </>
   );
 };
 

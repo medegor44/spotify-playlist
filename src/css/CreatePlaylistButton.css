@@ -1,0 +1,12 @@
+.createplaylist {
+    padding: 0.5rem 0;
+}
+
+.playlistname {
+    width: 100%;
+    padding-top: 0.5rem;
+}
+.playlistbutton {
+    width: 50%;
+    margin-top: 1em;
+}
