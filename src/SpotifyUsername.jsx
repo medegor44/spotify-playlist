@@ -4,33 +4,33 @@ import "./css/SpotifyUsername.css";
 
 const SpotifyUsername = () => {
   const [error, setError] = useState("");
-  const user = useContext(UserContext);
+  const { userData } = useContext(UserContext);
 
   useEffect(() => {
-    if (!user) return;
-    if (!user.token) {
+    if (!userData) return;
+    if (!userData.token) {
       setError("Cannot read access token");
       return;
     }
 
-    if (user.hasError) setError(user.message);
-  }, [user]);
+    if (userData.hasError) setError(userData.message);
+  }, [userData]);
 
   if (error) return <p>Error occurred while fetching name: {error}</p>;
 
-  if (user)
+  if (userData)
     return (
       <div className="profileContainer">
-        {user.profileImage ? (
+        {userData.profileImage ? (
           <img
-            src={user.profileImage}
+            src={userData.profileImage}
             className="centerСropped rounded"
             alt=""
           />
         ) : (
-          <h1 className="profileLetter rounded">{user.username[0]}</h1>
+          <h1 className="profileLetter rounded">{userData.username[0]}</h1>
         )}
-        <span className="username">{user.username}</span>
+        <span className="username">{userData.username}</span>
       </div>
     );
 
