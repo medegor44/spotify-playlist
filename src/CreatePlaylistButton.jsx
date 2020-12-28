@@ -6,7 +6,7 @@ import "./css/CreatePlaylistButton.css";
 
 const CreatePlaylistButton = ({ tracksUris }) => {
   const [playlistName, setName] = useState("");
-  const userData = useContext(UserContext);
+  const { userData, authorized } = useContext(UserContext);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -29,21 +29,24 @@ const CreatePlaylistButton = ({ tracksUris }) => {
 
   return (
     <>
-      <h3 className="major">Generate playlist</h3>
-      <div className="sectionContentContainer createplaylist">
+      <div className="sectionContentContainer createPlaylist">
+        <h3 className="major fullWidthText">Generate playlist</h3>
+
         <input
           type="text"
-          className="playlistname"
+          className="playlistName"
           placeholder="Enter playlist name"
           value={playlistName}
           onChange={(e) => {
             setName(e.target.value);
           }}
+          disabled={!authorized}
         />
         <button
-          className="playlistbutton"
+          className="playlistButton button primary"
           type="button"
           onClick={handleButtonClick}
+          disabled={!authorized}
         >
           Create playlist
         </button>
@@ -57,10 +60,6 @@ CreatePlaylistButton.propTypes = {
   tracksUris: PropTypes.arrayOf(PropTypes.string),
 };
 
-CreatePlaylistButton.defaultProps = {
-  tracksUris: [],
-};
-
 const Message = ({ error, success }) => {
   if (success) return <p>{success}</p>;
   if (error) return <p>{error}</p>;
@@ -70,11 +69,6 @@ const Message = ({ error, success }) => {
 Message.propTypes = {
   error: PropTypes.string,
   success: PropTypes.string,
-};
-
-Message.defaultProps = {
-  error: "",
-  success: "",
 };
 
 export default CreatePlaylistButton;

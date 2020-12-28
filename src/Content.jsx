@@ -3,8 +3,8 @@ import SpotifySongSearch from "./SpotifySongSearch";
 
 const Content = () => {
   return (
-    <section id="wrapper">
-      <header>
+    <>
+      <section id="banner">
         <div className="inner">
           <h2>Playlist Generator for Spotify</h2>
           <p>
@@ -12,13 +12,11 @@ const Content = () => {
             data providers.
           </p>
         </div>
-      </header>
-      <div className="wrapper">
-        <div className="inner">
-          <SpotifySongSearch />
-        </div>
-      </div>
-    </section>
+      </section>
+      <section id="wrapper">
+        <SpotifySongSearch />
+      </section>
+    </>
   );
 };
 

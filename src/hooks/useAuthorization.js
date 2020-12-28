@@ -19,8 +19,6 @@ const useAuthorization = () => {
 
       const user = await fetchUser(`${token}`);
 
-      console.log(user);
-
       if (user.hasError) {
         setAuthorized(false);
         return;
@@ -31,7 +29,6 @@ const useAuthorization = () => {
     authorize();
   }, []);
 
-  console.log(userData);
   return { userData, authorized };
 };
 

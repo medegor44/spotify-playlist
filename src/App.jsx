@@ -13,7 +13,6 @@ import "./css/App.css";
 const App = () => {
   const { userData, authorized } = useAuthorization();
 
-  console.log(userData);
   return (
     <div id="page-wrapper">
       <Router>

@@ -24,11 +24,13 @@ const SpotifyUsername = () => {
         {userData.profileImage ? (
           <img
             src={userData.profileImage}
-            className="centerСropped rounded"
+            className="centerСropped profilePic rounded"
             alt=""
           />
         ) : (
-          <h1 className="profileLetter rounded">{userData.username[0]}</h1>
+          <h1 className="profileLetter profilePic rounded">
+            {userData.username[0]}
+          </h1>
         )}
         <span className="username">{userData.username}</span>
       </div>

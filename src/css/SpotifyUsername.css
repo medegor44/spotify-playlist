@@ -1,19 +1,28 @@
 .rounded {
     border-radius: 100%;
+}
+
+.profilePic {
     height: 48px;
     width: 48px;
 }
 
 @media screen and (max-width: 480px) {
-    .rounded {
+    .profilePic {
         height: 24px;
         width: 24px;
     }
 }
 
+@media screen and (max-width: 1280px) {
+    .profilePic {
+        height: 40px;
+        width: 40px;
+    }
+}
 
 .profileLetter {
-    background-color: lightgoldenrodyellow;
+    background-color: #7985b0;
     text-align: center;
     margin: 0;
 }

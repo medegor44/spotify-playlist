@@ -10,8 +10,11 @@
     justify-content: flex-start;
     align-items: center;
 
-    height: 10em;
-    margin-top: 2%;
+    font-size: small;
+    text-align: left;
+
+    height: 5em;
+    margin-top: 0.5em;
     flex-wrap: nowrap;
     width: 100%;
 
@@ -34,13 +37,47 @@
 .trackPosition {
     margin: 0.5em;
     width: 40px;
-    font-size: 32px;
+    font-size: 1em;
+    text-align: right;
 }
 
 .trackDataContainer {
     margin-right: 1em;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
     width: 30%;
+}
+
+.albumName {}
+
+@media screen and (max-width: 600px) {
+    .trackContainer {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+
+        font-size: small;
+        text-align: left;
+
+        height: 8.5em;
+        margin-top: 0.5em;
+        flex-wrap: nowrap;
+        width: 100%;
+
+        background: rgba(255, 255, 255, 0.025);
+        border-radius: 5px;
+        border: none;
+        border: solid 2px rgba(255, 255, 255, 0.125);
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .albumName {
+        display: none;
+    }
+    .trackPosition {
+        margin: 0.5em;
+        width: 30px;
+        font-size: 1em;
+        text-align: right;
+    }
 }
