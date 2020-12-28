@@ -2,7 +2,6 @@ import React from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 
 import SpotifyLogin from "./SpotifyLogin";
-import SpotifyPlaylists from "./SpotifyPlaylists";
 import SpotifySongSearch from "./SpotifySongSearch";
 import UserContext from "./contexts/UserContext";
 import useAuthorization from "./hooks/useAuthorization";
@@ -23,7 +22,7 @@ const Header = ({ authorized }) => {
   );
 };
 
-const AppContent = ({ authorized }) => {
+const Content = ({ authorized }) => {
   return (
     <section id="wrapper">
       <header>
@@ -44,7 +43,7 @@ const AppContent = ({ authorized }) => {
   );
 };
 
-const AppFooter = () => {
+const Footer = () => {
   return (
     <section id="footer">
       <div className="inner">
@@ -69,8 +68,8 @@ const App = () => {
           <Route path="/">
             <UserContext.Provider value={userData}>
               <Header authorized={authorized} />
-              <AppContent authorized={authorized} />
-              <AppFooter />
+              <Content authorized={authorized} />
+              <Footer />
             </UserContext.Provider>
           </Route>
         </Switch>
