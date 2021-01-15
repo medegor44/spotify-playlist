@@ -148,4 +148,4 @@ module.exports=function n(t,o,r){return void 0===o?function(o,r){return n(t,o,r)
 },{"react":"n8MK","react-router-dom":"uc19","./Header":"p6Ki","./Content":"fS0G","./Footer":"DcDK","./contexts/UserContext":"gYjN","./hooks/useAuthorization":"gSuD","../assets/css/main.css":"F9GT","./css/App.css":"YqNb"}],"deHo":[function(require,module,exports) {
 "use strict";var e=u(require("react")),r=u(require("react-dom")),t=u(require("./App"));function u(e){return e&&e.__esModule?e:{default:e}}r.default.render(e.default.createElement(t.default,null),document.getElementById("app"));
 },{"react":"n8MK","react-dom":"NKHc","./App":"DPRK"}]},{},["deHo"], null)
-//# sourceMappingURL=/spotify-playlist/src.155b612f.js.map
+//# sourceMappingURL=/spotify-playlist/src.affdaa25.js.map
