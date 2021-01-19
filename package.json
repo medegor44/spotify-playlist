@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run linter && parcel src/index.html",
+    "start": "parcel src/index.html",
     "build": "npm run linter && parcel build src/index.html --public-url /spotify-playlist",
     "test": "echo \"Error: no test specified\" && exit 1",
     "linter": "eslint src/*.js*"

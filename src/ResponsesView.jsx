@@ -1,26 +1,10 @@
 import PropTypes from "prop-types";
 import React from "react";
+
 import { fromS } from "hh-mm-ss";
+import { responseType, trackType, errorType } from "./ResponsesPropTypes";
+
 import "./css/TrackView.css";
-
-const trackType = PropTypes.shape({
-  trackUri: PropTypes.string,
-  artists: PropTypes.arrayOf(PropTypes.string),
-  name: PropTypes.string,
-  album: PropTypes.string,
-  albumCover: PropTypes.string,
-  hasError: PropTypes.bool,
-  duration: PropTypes.number,
-  id: PropTypes.string,
-});
-
-const errorType = PropTypes.shape({
-  message: PropTypes.string,
-  hasError: PropTypes.bool,
-  id: PropTypes.string,
-});
-
-const responsesType = PropTypes.oneOfType([trackType, errorType]);
 
 const TrackView = ({ track, idx }) => {
   const durationInSec = Math.floor(track.duration / 1000);
@@ -31,11 +15,12 @@ const TrackView = ({ track, idx }) => {
       <h1 className="trackPosition">{idx + 1}</h1>
       <img className="albumCover" src={track.albumCover} alt="" />
       <div className="trackDataContainer">
-        <p>{artists}</p>
-        <p>{track.name}</p>
+        {artists}
+        <br />
+        {track.name}
       </div>
-      <p className="trackDataContainer">{track.album}</p>
-      <p className="trackDataContainer">{fromS(durationInSec, "mm:ss")}</p>
+      <div className="trackDataContainer albumName">{track.album}</div>
+      <div className="trackDataContainer">{fromS(durationInSec, "mm:ss")}</div>
     </div>
   );
 };
@@ -45,16 +30,11 @@ TrackView.propTypes = {
   idx: PropTypes.number,
 };
 
-TrackView.defaultProps = {
-  track: null,
-  idx: -1,
-};
-
 const ErrorView = ({ error, idx }) => {
   return (
-    <div className="trackContainer errorIndicator" color="red">
+    <div className="trackContainer errorIndicator">
       <h1 className="trackPosition">{idx + 1}</h1>
-      <p>There was an error: {error.message}</p>
+      There was an error: {error.message}
     </div>
   );
 };
@@ -64,11 +44,6 @@ ErrorView.propTypes = {
   idx: PropTypes.number,
 };
 
-ErrorView.defaultProps = {
-  error: null,
-  idx: -1,
-};
-
 const ResponsesView = ({ responses }) => {
   const views = responses.map((response, idx) => {
     if (!response.hasError)
@@ -76,15 +51,16 @@ const ResponsesView = ({ responses }) => {
     return <ErrorView error={response} idx={idx} key={response.id} />;
   });
 
-  return <div className="responseContainer">{views}</div>;
+  return (
+    <>
+      <h3 className="major fullWidthText">Resolved Spotify tracks</h3>
+      <div className="responseContainer">{views}</div>
+    </>
+  );
 };
 
 ResponsesView.propTypes = {
-  responses: PropTypes.arrayOf(responsesType),
-};
-
-ResponsesView.defaultProps = {
-  responses: [],
+  responses: PropTypes.arrayOf(responseType),
 };
 
 export default ResponsesView;

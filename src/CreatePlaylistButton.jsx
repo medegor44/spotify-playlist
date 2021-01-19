@@ -2,10 +2,11 @@ import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import UserContext from "./contexts/UserContext";
 import { addTracksToPlaylist, createPlaylist } from "./utils/spotify";
+import "./css/CreatePlaylistButton.css";
 
 const CreatePlaylistButton = ({ tracksUris }) => {
   const [playlistName, setName] = useState("");
-  const userData = useContext(UserContext);
+  const { userData, authorized } = useContext(UserContext);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -27,28 +28,36 @@ const CreatePlaylistButton = ({ tracksUris }) => {
   };
 
   return (
-    <div>
-      <input
-        type="text"
-        value={playlistName}
-        onChange={(e) => {
-          setName(e.target.value);
-        }}
-      />
-      <button type="button" onClick={handleButtonClick}>
-        Create playlist
-      </button>
-      <Message error={error} success={success} />
-    </div>
+    <>
+      <div className="sectionContentContainer createPlaylist">
+        <h3 className="major fullWidthText">Generate playlist</h3>
+
+        <input
+          type="text"
+          className="playlistName"
+          placeholder="Enter playlist name"
+          value={playlistName}
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
+          disabled={!authorized}
+        />
+        <button
+          className="playlistButton button primary"
+          type="button"
+          onClick={handleButtonClick}
+          disabled={!authorized}
+        >
+          Create playlist
+        </button>
+        <Message error={error} success={success} />
+      </div>
+    </>
   );
 };
 
 CreatePlaylistButton.propTypes = {
   tracksUris: PropTypes.arrayOf(PropTypes.string),
-};
-
-CreatePlaylistButton.defaultProps = {
-  tracksUris: [],
 };
 
 const Message = ({ error, success }) => {
@@ -60,11 +69,6 @@ const Message = ({ error, success }) => {
 Message.propTypes = {
   error: PropTypes.string,
   success: PropTypes.string,
-};
-
-Message.defaultProps = {
-  error: "",
-  success: "",
 };
 
 export default CreatePlaylistButton;

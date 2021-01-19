@@ -10,13 +10,18 @@
     justify-content: flex-start;
     align-items: center;
 
-    height: 10em;
-    margin-top: 2%;
-    flex-wrap: nowrap;
+    font-size: small;
+    text-align: left;
 
-    background-color: lightgreen;
-    border: 1px solid lightgray;
-    border-radius: 10px;
+    height: 5em;
+    margin-top: 0.5em;
+    flex-wrap: nowrap;
+    width: 100%;
+
+    background: rgba(255, 255, 255, 0.025);
+    border-radius: 5px;
+    border: none;
+    border: solid 2px rgba(255, 255, 255, 0.125);
 }
 
 .albumCover {
@@ -31,15 +36,48 @@
 
 .trackPosition {
     margin: 0.5em;
-    max-width: 5%;
-    min-width: 5%;
-    width: 5%;
+    width: 40px;
+    font-size: 1em;
+    text-align: right;
 }
 
 .trackDataContainer {
     margin-right: 1em;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
     width: 30%;
+}
+
+.albumName {}
+
+@media screen and (max-width: 600px) {
+    .trackContainer {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+
+        font-size: small;
+        text-align: left;
+
+        height: 8.5em;
+        margin-top: 0.5em;
+        flex-wrap: nowrap;
+        width: 100%;
+
+        background: rgba(255, 255, 255, 0.025);
+        border-radius: 5px;
+        border: none;
+        border: solid 2px rgba(255, 255, 255, 0.125);
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .albumName {
+        display: none;
+    }
+    .trackPosition {
+        margin: 0.5em;
+        width: 30px;
+        font-size: 1em;
+        text-align: right;
+    }
 }

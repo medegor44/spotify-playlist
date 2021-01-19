@@ -8,7 +8,11 @@ const SpotifyLoginButton = () => {
   };
 
   return (
-    <button type="button" onClick={initiateSpotifyLogin}>
+    <button
+      className="button primary"
+      type="button"
+      onClick={initiateSpotifyLogin}
+    >
       Log in to spotify
     </button>
   );
