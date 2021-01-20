@@ -1,12 +1,17 @@
 import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import UserContext from "./contexts/UserContext";
+
+import UnauthorizedError from "./utils/UnauthorizedError";
 import { addTracksToPlaylist, createPlaylist } from "./utils/spotify";
+
 import "./css/CreatePlaylistButton.css";
 
 const CreatePlaylistButton = ({ tracksUris }) => {
   const [playlistName, setName] = useState("");
-  const { userData, authorized } = useContext(UserContext);
+  const { userData, authorized, setAuthorizationError } = useContext(
+    UserContext
+  );
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -23,7 +28,8 @@ const CreatePlaylistButton = ({ tracksUris }) => {
       await addTracksToPlaylist(userData.token, playlistId, tracksUris);
       setSuccess(`${playlistName} created`);
     } catch (e) {
-      setError(`There was an error: ${e.message}`);
+      if (e instanceof UnauthorizedError) setAuthorizationError(e);
+      else setError(e.message);
     }
   };
 

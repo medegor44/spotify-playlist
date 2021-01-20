@@ -1,5 +1,6 @@
 import queryString from "query-string";
 import CLIENT_ID from "./constants";
+import UnauthorizedError from "./UnauthorizedError";
 
 const SPOTIFY_BASE_URL = "https://api.spotify.com/v1";
 
@@ -36,7 +37,11 @@ const requestToApi = async (url, token, method = "GET", body = null) => {
 
   const data = await response.json();
 
-  if (response.status >= 400) throw parseError(data);
+  if (response.status >= 400) {
+    if (response.status === 401)
+      throw new UnauthorizedError("User is unauthorized");
+    throw parseError(data);
+  }
 
   return data;
 };
@@ -93,17 +98,13 @@ const fetchTrack = async (token, track) => {
 
   const url = `${SPOTIFY_BASE_URL}/search?${queryString.stringify(param)}`;
 
-  try {
-    const data = await requestToApi(url, token);
+  const data = await requestToApi(url, token);
 
-    if (data.tracks.items.length) return mapToTrackModel(data.tracks.items[0]);
-    return {
-      message: "track not found",
-      hasError: true,
-    };
-  } catch (e) {
-    return { message: e.message, hasError: true };
-  }
+  if (data.tracks.items.length) return mapToTrackModel(data.tracks.items[0]);
+  return {
+    message: "track not found",
+    hasError: true,
+  };
 };
 
 export const fetchTracks = async (token, tracks) => {
@@ -121,11 +122,7 @@ const mapToUserModel = (spotifyModel) => {
 
 export const fetchUser = async (token) => {
   const url = `${SPOTIFY_BASE_URL}/me`;
-  try {
-    const data = await requestToApi(url, token);
+  const data = await requestToApi(url, token);
 
-    return mapToUserModel(data);
-  } catch (e) {
-    return { message: e.message, hasError: true };
-  }
+  return mapToUserModel(data);
 };

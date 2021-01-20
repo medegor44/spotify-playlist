@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import shortid from "shortid";
 
 import { fetchTracks } from "./utils/spotify";
@@ -15,26 +15,35 @@ const SpotifySongSearch = () => {
   const [responses, setResponses] = useState([]);
   const [rawText, setRawText] = useState("");
   const [isFetching, setIsFetching] = useState(false);
-  const { userData, authorized } = useContext(UserContext);
+  const { userData, authorized, setAuthorizationError } = useContext(
+    UserContext
+  );
 
   const handleTracksChange = (event) => {
     const text = event.target.value;
     setRawText(text);
   };
 
-  const performRequest = async (artistsTracksText, token) => {
-    const tracks = parseArtistsTracks(artistsTracksText);
-    setIsFetching(true);
+  const performRequest = useCallback(
+    async (artistsTracksText, token) => {
+      const tracks = parseArtistsTracks(artistsTracksText);
+      setIsFetching(true);
 
-    const trackResponses = (await fetchTracks(token, tracks)).map(
-      (response, idx) => {
-        return { ...response, id: `${shortid.generate()} ${idx}` };
+      try {
+        const trackResponses = (await fetchTracks(token, tracks)).map(
+          (response, idx) => {
+            return { ...response, id: `${shortid.generate()} ${idx}` };
+          }
+        );
+
+        setIsFetching(false);
+        setResponses(trackResponses);
+      } catch (e) {
+        setAuthorizationError(e);
       }
-    );
-
-    setIsFetching(false);
-    setResponses(trackResponses);
-  };
+    },
+    [setAuthorizationError]
+  );
 
   const handleClick = () => {
     setTracks(rawText);
@@ -47,7 +56,7 @@ const SpotifySongSearch = () => {
     const text = getTracks();
     setRawText(text);
     performRequest(text, userData.token);
-  }, [authorized, userData]);
+  }, [authorized, userData, performRequest]);
 
   return (
     <>
