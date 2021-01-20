@@ -1,6 +1,14 @@
 import { useState, useEffect } from "react";
-import { getToken, setToken } from "../utils/tokenStorage";
-import { fetchUser, getAccessTokenFromLocationHash } from "../utils/spotify";
+import {
+  getToken,
+  getTokenExpirationDate,
+  setTokenInfo,
+  clearTokenInfo,
+} from "../utils/tokenStorage";
+import {
+  fetchUser,
+  getAccessTokenInfoFromLocationHash,
+} from "../utils/spotify";
 
 const useAuthorization = () => {
   const [authorized, setAuthorized] = useState(false);
@@ -9,12 +17,23 @@ const useAuthorization = () => {
   useEffect(() => {
     const authorize = async () => {
       if (!getToken()) {
-        const token = getAccessTokenFromLocationHash(window.location.hash);
+        const { token, expiresIn } = getAccessTokenInfoFromLocationHash(
+          window.location.hash
+        );
         if (!token) return;
-        setToken(token);
+        setTokenInfo(token, Date.now() + Number(expiresIn));
       }
 
       const token = getToken();
+      const expirationDate = getTokenExpirationDate();
+
+      if (expirationDate <= Date.now()) {
+        setAuthorized(false);
+        setUserData(null);
+        clearTokenInfo();
+        return;
+      }
+
       setAuthorized(true);
 
       const user = await fetchUser(`${token}`);

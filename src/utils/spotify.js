@@ -15,9 +15,9 @@ export const generateAuthUrl = (redirectUri) => {
   return `https://accounts.spotify.com/authorize?${queryStringParams}`;
 };
 
-export const getAccessTokenFromLocationHash = (locationHash) => {
+export const getAccessTokenInfoFromLocationHash = (locationHash) => {
   const parsed = queryString.parse(locationHash);
-  return parsed["/access_token"];
+  return { token: parsed["/access_token"], expiresIn: parsed.expires_in };
 };
 
 const parseError = (data) => {
