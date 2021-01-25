@@ -1,14 +1,6 @@
-import { useState, useEffect } from "react";
-import {
-  getToken,
-  getTokenExpirationDate,
-  setTokenInfo,
-  clearTokenInfo,
-} from "../utils/tokenStorage";
-import {
-  fetchUser,
-  getAccessTokenInfoFromLocationHash,
-} from "../utils/spotify";
+import { useEffect, useState } from "react";
+import { clearTokenInfo, getToken, setToken } from "../utils/tokenStorage";
+import { fetchUser, getAccessTokenFromLocationHash } from "../utils/spotify";
 
 const useAuthorization = () => {
   const [authorized, setAuthorized] = useState(false);
@@ -17,17 +9,18 @@ const useAuthorization = () => {
   useEffect(() => {
     const authorize = async () => {
       if (!getToken()) {
-        const { token, expiresIn } = getAccessTokenInfoFromLocationHash(
-          window.location.hash
-        );
+        const token = getAccessTokenFromLocationHash(window.location.hash);
+
         if (!token) return;
-        setTokenInfo(token, Date.now() + Number(expiresIn));
+
+        setToken(token);
       }
 
       const token = getToken();
-      const expirationDate = getTokenExpirationDate();
 
-      if (expirationDate <= Date.now()) {
+      const user = await fetchUser(`${token}`);
+
+      if (user.hasError) {
         setAuthorized(false);
         setUserData(null);
         clearTokenInfo();
@@ -35,17 +28,16 @@ const useAuthorization = () => {
       }
 
       setAuthorized(true);
-
-      const user = await fetchUser(`${token}`);
-
-      if (user.hasError) {
-        setAuthorized(false);
-        return;
-      }
       setUserData({ token, ...user });
     };
 
+    const redirectToOrigin = () => {
+      const currentUrl = window.location.href;
+      window.location.href = currentUrl.slice(0, currentUrl.indexOf("#") + 1);
+    };
+
     authorize();
+    redirectToOrigin();
   }, []);
 
   return { userData, authorized };

@@ -4,8 +4,6 @@ import { generateAuthUrl } from "./utils/spotify";
 const SpotifyLoginButton = () => {
   const initiateSpotifyLogin = () => {
     const url = window.location.href.split("?")[0];
-    const authUrl = generateAuthUrl(url);
-    console.log(authUrl);
     window.location.href = generateAuthUrl(url);
   };
 
