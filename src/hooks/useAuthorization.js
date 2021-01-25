@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { clearTokenInfo, getToken, setToken } from "../utils/tokenStorage";
+import { clearToken, getToken, setToken } from "../utils/tokenStorage";
 import { fetchUser, getAccessTokenFromLocationHash } from "../utils/spotify";
 
 const useAuthorization = () => {
@@ -23,7 +23,7 @@ const useAuthorization = () => {
       if (user.hasError) {
         setAuthorized(false);
         setUserData(null);
-        clearTokenInfo();
+        clearToken();
         return;
       }
 
