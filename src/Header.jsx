@@ -5,7 +5,7 @@ const Header = () => {
   return (
     <header id="header">
       <h1>
-        <a href="/">spotify playlist</a>
+        <a href="./">spotify playlist</a>
       </h1>
       <nav>
         <SpotifyLogin />
