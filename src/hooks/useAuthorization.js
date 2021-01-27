@@ -5,6 +5,13 @@ import { fetchUser, getAccessTokenFromLocationHash } from "../utils/spotify";
 const useAuthorization = () => {
   const [authorized, setAuthorized] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [error, setError] = useState(false);
+
+  const handleError = () => {
+    clearToken();
+  };
+
+  const setErrorTrue = () => setError(true);
 
   useEffect(() => {
     const authorize = async () => {
@@ -18,17 +25,13 @@ const useAuthorization = () => {
 
       const token = getToken();
 
-      const user = await fetchUser(`${token}`);
-
-      if (user.hasError) {
-        setAuthorized(false);
-        setUserData(null);
-        clearToken();
-        return;
+      try {
+        const user = await fetchUser(`${token}`);
+        setAuthorized(true);
+        setUserData({ token, ...user });
+      } catch (e) {
+        setError(true);
       }
-
-      setAuthorized(true);
-      setUserData({ token, ...user });
     };
 
     const redirectToOrigin = () => {
@@ -40,7 +43,7 @@ const useAuthorization = () => {
     redirectToOrigin();
   }, []);
 
-  return { userData, authorized };
+  return { userData, authorized, error, handleError, setErrorTrue };
 };
 
 export default useAuthorization;

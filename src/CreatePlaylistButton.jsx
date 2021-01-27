@@ -6,8 +6,8 @@ import "./css/CreatePlaylistButton.css";
 
 const CreatePlaylistButton = ({ tracksUris }) => {
   const [playlistName, setName] = useState("");
-  const { userData, authorized } = useContext(UserContext);
-  const [error, setError] = useState("");
+  const { userData, authorized, setErrorTrue } = useContext(UserContext);
+  const [error] = useState("");
   const [success, setSuccess] = useState("");
 
   const handleButtonClick = async () => {
@@ -23,7 +23,7 @@ const CreatePlaylistButton = ({ tracksUris }) => {
       await addTracksToPlaylist(userData.token, playlistId, tracksUris);
       setSuccess(`${playlistName} created`);
     } catch (e) {
-      setError(`There was an error: ${e.message}`);
+      setErrorTrue();
     }
   };
 
