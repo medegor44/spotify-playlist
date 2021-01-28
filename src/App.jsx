@@ -15,12 +15,12 @@ const App = () => {
   const {
     userData,
     authorized,
-    error,
+    authorizationError,
     handleError,
-    setErrorTrue,
+    setAuthorizationError,
   } = useAuthorization();
 
-  if (error) handleError();
+  if (authorizationError) handleError();
 
   return (
     <div id="page-wrapper">
@@ -28,12 +28,12 @@ const App = () => {
         <Switch>
           <Route path="/">
             <UserContext.Provider
-              value={{ userData, authorized, setErrorTrue }}
+              value={{ userData, authorized, setAuthorizationError }}
             >
               <Header />
               <Content />
               <Footer />
-              <Modal show={error} />
+              <Modal show={authorizationError} />
             </UserContext.Provider>
           </Route>
         </Switch>

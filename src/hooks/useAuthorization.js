@@ -2,16 +2,19 @@ import { useEffect, useState } from "react";
 import { clearToken, getToken, setToken } from "../utils/tokenStorage";
 import { fetchUser, getAccessTokenFromLocationHash } from "../utils/spotify";
 
+const redirectToOrigin = () => {
+  const currentUrl = window.location.href;
+  window.location.href = currentUrl.slice(0, currentUrl.indexOf("#") + 2);
+};
+
 const useAuthorization = () => {
   const [authorized, setAuthorized] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [error, setError] = useState(false);
+  const [authorizationError, setAuthorizationError] = useState(null);
 
   const handleError = () => {
     clearToken();
   };
-
-  const setErrorTrue = () => setError(true);
 
   useEffect(() => {
     const authorize = async () => {
@@ -21,29 +24,31 @@ const useAuthorization = () => {
         if (!token) return;
 
         setToken(token);
+
+        redirectToOrigin();
       }
 
       const token = getToken();
 
       try {
-        const user = await fetchUser(`${token}`);
         setAuthorized(true);
+        const user = await fetchUser(`${token}`);
         setUserData({ token, ...user });
       } catch (e) {
-        setError(true);
+        setAuthorizationError(e);
       }
     };
 
-    const redirectToOrigin = () => {
-      const currentUrl = window.location.href;
-      window.location.href = currentUrl.slice(0, currentUrl.indexOf("#") + 1);
-    };
-
     authorize();
-    redirectToOrigin();
-  }, []);
+  }, [authorized]);
 
-  return { userData, authorized, error, handleError, setErrorTrue };
+  return {
+    userData,
+    authorized,
+    authorizationError,
+    handleError,
+    setAuthorizationError,
+  };
 };
 
 export default useAuthorization;

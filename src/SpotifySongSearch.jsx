@@ -15,7 +15,9 @@ const SpotifySongSearch = () => {
   const [responses, setResponses] = useState([]);
   const [rawText, setRawText] = useState("");
   const [isFetching, setIsFetching] = useState(false);
-  const { userData, authorized, setErrorTrue } = useContext(UserContext);
+  const { userData, authorized, setAuthorizationError } = useContext(
+    UserContext
+  );
 
   const handleTracksChange = (event) => {
     const text = event.target.value;
@@ -37,10 +39,10 @@ const SpotifySongSearch = () => {
         setIsFetching(false);
         setResponses(trackResponses);
       } catch (e) {
-        setErrorTrue();
+        setAuthorizationError(e);
       }
     },
-    [setErrorTrue]
+    [setAuthorizationError]
   );
 
   const handleClick = () => {

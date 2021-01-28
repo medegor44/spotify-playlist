@@ -1,5 +1,6 @@
 import queryString from "query-string";
 import CLIENT_ID from "./constants";
+import UnauthorizedError from "./UnauthorizedError";
 
 const SPOTIFY_BASE_URL = "https://api.spotify.com/v1";
 
@@ -36,7 +37,11 @@ const requestToApi = async (url, token, method = "GET", body = null) => {
 
   const data = await response.json();
 
-  if (response.status >= 400) throw parseError(data);
+  if (response.status >= 400) {
+    if (response.status === 401)
+      throw new UnauthorizedError("User is unauthorized");
+    throw parseError(data);
+  }
 
   return data;
 };
