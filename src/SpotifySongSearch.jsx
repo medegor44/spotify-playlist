@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import shortid from "shortid";
 
 import { fetchTracks } from "./utils/spotify";
@@ -10,44 +10,53 @@ import ResponsesContainer from "./ResponsesContainer";
 import CreatePlaylistForm from "./CreatePlaylistForm";
 
 import "./css/SpotifySongSearch.css";
+import useToken from "./hooks/useToken";
 
 const SpotifySongSearch = () => {
   const [responses, setResponses] = useState([]);
   const [rawText, setRawText] = useState("");
   const [isFetching, setIsFetching] = useState(false);
-  const { userData, authorized } = useContext(UserContext);
+  const { userData, onError } = useContext(UserContext);
+  const [token] = useToken();
 
   const handleTracksChange = (event) => {
     const text = event.target.value;
     setRawText(text);
   };
 
-  const performRequest = async (artistsTracksText, token) => {
-    const tracks = parseArtistsTracks(artistsTracksText);
-    setIsFetching(true);
+  const performRequest = useCallback(
+    async (artistsTracksText, authToken) => {
+      const tracks = parseArtistsTracks(artistsTracksText);
+      setIsFetching(true);
 
-    const trackResponses = (await fetchTracks(token, tracks)).map(
-      (response, idx) => {
-        return { ...response, id: `${shortid.generate()} ${idx}` };
+      try {
+        const trackResponses = (await fetchTracks(authToken, tracks)).map(
+          (response, idx) => {
+            return { ...response, id: `${shortid.generate()} ${idx}` };
+          }
+        );
+
+        setIsFetching(false);
+        setResponses(trackResponses);
+      } catch (e) {
+        onError();
       }
-    );
-
-    setIsFetching(false);
-    setResponses(trackResponses);
-  };
+    },
+    [onError]
+  );
 
   const handleClick = () => {
     setTracks(rawText);
-    performRequest(rawText, userData.token);
+    performRequest(rawText, token);
   };
 
   useEffect(() => {
-    if (!userData || !authorized) return;
+    if (!token) return;
 
     const text = getTracks();
     setRawText(text);
-    performRequest(text, userData.token);
-  }, [authorized, userData]);
+    performRequest(text, token);
+  }, [token, userData, performRequest]);
 
   return (
     <>

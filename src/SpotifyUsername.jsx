@@ -8,10 +8,6 @@ const SpotifyUsername = () => {
 
   useEffect(() => {
     if (!userData) return;
-    if (!userData.token) {
-      setError("Cannot read access token");
-      return;
-    }
 
     if (userData.hasError) setError(userData.message);
   }, [userData]);
