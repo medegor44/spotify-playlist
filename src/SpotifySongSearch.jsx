@@ -10,14 +10,14 @@ import ResponsesContainer from "./ResponsesContainer";
 import CreatePlaylistForm from "./CreatePlaylistForm";
 
 import "./css/SpotifySongSearch.css";
+import useToken from "./hooks/useToken";
 
 const SpotifySongSearch = () => {
   const [responses, setResponses] = useState([]);
   const [rawText, setRawText] = useState("");
   const [isFetching, setIsFetching] = useState(false);
-  const { userData, authorized, setAuthorizationError } = useContext(
-    UserContext
-  );
+  const { userData, onError } = useContext(UserContext);
+  const [token] = useToken();
 
   const handleTracksChange = (event) => {
     const text = event.target.value;
@@ -25,12 +25,12 @@ const SpotifySongSearch = () => {
   };
 
   const performRequest = useCallback(
-    async (artistsTracksText, token) => {
+    async (artistsTracksText, authToken) => {
       const tracks = parseArtistsTracks(artistsTracksText);
       setIsFetching(true);
 
       try {
-        const trackResponses = (await fetchTracks(token, tracks)).map(
+        const trackResponses = (await fetchTracks(authToken, tracks)).map(
           (response, idx) => {
             return { ...response, id: `${shortid.generate()} ${idx}` };
           }
@@ -39,24 +39,24 @@ const SpotifySongSearch = () => {
         setIsFetching(false);
         setResponses(trackResponses);
       } catch (e) {
-        setAuthorizationError(e);
+        onError();
       }
     },
-    [setAuthorizationError]
+    [onError]
   );
 
   const handleClick = () => {
     setTracks(rawText);
-    performRequest(rawText, userData.token);
+    performRequest(rawText, token);
   };
 
   useEffect(() => {
-    if (!userData || !authorized) return;
+    if (!token) return;
 
     const text = getTracks();
     setRawText(text);
-    performRequest(text, userData.token);
-  }, [authorized, userData, performRequest]);
+    performRequest(text, token);
+  }, [token, userData, performRequest]);
 
   return (
     <>

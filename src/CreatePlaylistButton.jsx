@@ -4,31 +4,27 @@ import UserContext from "./contexts/UserContext";
 
 import UnauthorizedError from "./utils/UnauthorizedError";
 import { addTracksToPlaylist, createPlaylist } from "./utils/spotify";
+import useToken from "./hooks/useToken";
 
 import "./css/CreatePlaylistButton.css";
 
 const CreatePlaylistButton = ({ tracksUris }) => {
   const [playlistName, setName] = useState("");
-  const { userData, authorized, setAuthorizationError } = useContext(
-    UserContext
-  );
+  const { userData, onError } = useContext(UserContext);
+  const [token] = useToken();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   const handleButtonClick = async () => {
-    const data = await createPlaylist(
-      userData.token,
-      userData.id,
-      playlistName
-    );
-
-    const playlistId = data.id;
-
     try {
-      await addTracksToPlaylist(userData.token, playlistId, tracksUris);
+      const data = await createPlaylist(token, userData.id, playlistName);
+      const playlistId = data.id;
+
+      await addTracksToPlaylist(token, playlistId, tracksUris);
+
       setSuccess(`${playlistName} created`);
     } catch (e) {
-      if (e instanceof UnauthorizedError) setAuthorizationError(e);
+      if (e instanceof UnauthorizedError) onError();
       else setError(e.message);
     }
   };
@@ -46,13 +42,13 @@ const CreatePlaylistButton = ({ tracksUris }) => {
           onChange={(e) => {
             setName(e.target.value);
           }}
-          disabled={!authorized}
+          disabled={!token}
         />
         <button
           className="playlistButton button primary"
           type="button"
           onClick={handleButtonClick}
-          disabled={!authorized}
+          disabled={!token}
         >
           Create playlist
         </button>

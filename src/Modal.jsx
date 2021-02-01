@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import SpotifyLoginButton from "./SpotifyLoginButton";
-import UnauthorizedError from "./utils/UnauthorizedError";
 
 import "./css/Modal.css";
 
@@ -20,7 +19,7 @@ const Modal = ({ show }) => {
 };
 
 Modal.propTypes = {
-  show: PropTypes.instanceOf(UnauthorizedError),
+  show: PropTypes.bool,
 };
 
 export default Modal;

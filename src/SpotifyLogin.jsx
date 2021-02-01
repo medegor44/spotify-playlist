@@ -1,13 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 
-import UserContext from "./contexts/UserContext";
 import SpotifyUsername from "./SpotifyUsername";
 import SpotifyLoginButton from "./SpotifyLoginButton";
+import useToken from "./hooks/useToken";
 
 const SpotifyLogin = () => {
-  const { userData, authorized } = useContext(UserContext);
+  const [token] = useToken();
 
-  if (userData && authorized) return <SpotifyUsername />;
+  if (token) return <SpotifyUsername />;
 
   return <SpotifyLoginButton />;
 };

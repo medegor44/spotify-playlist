@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
-import UserContext from "./contexts/UserContext";
+import useToken from "./hooks/useToken";
 
 const SearchForm = ({ handleTracksChange, rawText, handleClick }) => {
-  const { authorized } = useContext(UserContext);
+  const [token] = useToken();
   return (
     <section className="wrapper spotlight style3 ">
       <div className="inner">
@@ -15,13 +15,13 @@ const SearchForm = ({ handleTracksChange, rawText, handleClick }) => {
             placeholder='Enter you playlist items in "artist - title" format'
             onChange={handleTracksChange}
             value={rawText}
-            disabled={!authorized}
+            disabled={!token}
           />
           <button
             className="searchButton button primary"
             type="button"
             onClick={handleClick}
-            disabled={!authorized}
+            disabled={!token}
           >
             Search
           </button>
