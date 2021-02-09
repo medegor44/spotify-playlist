@@ -26,7 +26,14 @@ const parseError = (data) => {
   return null;
 };
 
-const requestToApi = async (url, token, method = "GET", body = null) => {
+const requestToApi = async (
+  url,
+  token,
+  method = "GET",
+  body = null,
+  retries = 20,
+  timeout = 1000
+) => {
   const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -35,12 +42,26 @@ const requestToApi = async (url, token, method = "GET", body = null) => {
     body,
   });
 
+  console.log(response);
+
   const data = await response.json();
 
   if (response.status >= 400) {
     if (response.status === 401)
       throw new UnauthorizedError("User is unauthorized");
-    throw parseError(data);
+    if (response.status === 429) {
+      if (retries > 0) {
+        return new Promise((resolve) => {
+          setTimeout(
+            () =>
+              resolve(requestToApi(url, token, method, body, retries, timeout)),
+            timeout
+          );
+        });
+      }
+
+      return { ...parseError(data), hasError: true };
+    }
   }
 
   return data;
@@ -97,18 +118,36 @@ const fetchTrack = async (token, track) => {
   };
 
   const url = `${SPOTIFY_BASE_URL}/search?${queryString.stringify(param)}`;
+  try {
+    const data = await requestToApi(url, token);
 
-  const data = await requestToApi(url, token);
-
-  if (data.tracks.items.length) return mapToTrackModel(data.tracks.items[0]);
-  return {
-    message: "track not found",
-    hasError: true,
-  };
+    console.log(data);
+    if (data.tracks.items.length) return mapToTrackModel(data.tracks.items[0]);
+    return {
+      message: "track not found",
+      hasError: true,
+    };
+  } catch (e) {
+    console.log(e);
+    return {
+      message: "maybe rate limiter",
+      hasError: true,
+    };
+  }
 };
 
 export const fetchTracks = async (token, tracks) => {
-  return Promise.all(tracks.map((track) => fetchTrack(token, track)));
+  return Promise.all(tracks.map((t) => fetchTrack(token, t)));
+
+  const responses = [];
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const track of tracks) {
+    // eslint-disable-next-line no-await-in-loop
+    responses.push(await fetchTrack(token, track));
+  }
+
+  return responses;
 };
 
 const mapToUserModel = (spotifyModel) => {
