@@ -1,6 +1,8 @@
 import queryString from "query-string";
+import axios from "axios";
 import CLIENT_ID from "./constants";
 import UnauthorizedError from "./UnauthorizedError";
+import RetriesCountExceededError from "./RetriesCountExceededError";
 
 const SPOTIFY_BASE_URL = "https://api.spotify.com/v1";
 
@@ -26,24 +28,58 @@ const parseError = (data) => {
   return null;
 };
 
-const requestToApi = async (url, token, method = "GET", body = null) => {
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    method,
-    body,
-  });
+const getRandomInt = (maxValue) =>
+  Math.floor(Math.random() * Math.floor(maxValue));
 
-  const data = await response.json();
+const requestToApi = async (
+  url,
+  token,
+  method = "GET",
+  body = null,
+  retries = 10
+) => {
+  if (retries === 0)
+    throw new RetriesCountExceededError("Count of retries is exceeded");
 
-  if (response.status >= 400) {
-    if (response.status === 401)
-      throw new UnauthorizedError("User is unauthorized");
-    throw parseError(data);
+  const retry = async (timeout, retriesCount = retries) => {
+    return new Promise((resolve) => {
+      setTimeout(
+        () => resolve(requestToApi(url, token, method, body, retriesCount)),
+        timeout
+      );
+    });
+  };
+
+  try {
+    const response = await axios({
+      method,
+      url,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: body,
+    });
+
+    return response.data;
+  } catch (e) {
+    const { response } = e;
+
+    const maxOfRandomDelay = 500;
+    const randomDelayInMs = getRandomInt(maxOfRandomDelay);
+
+    if (response.status >= 400) {
+      if (response.status === 401)
+        throw new UnauthorizedError("User is unauthorized");
+
+      let timeoutInMs = 1000;
+      if (response.status === 429)
+        timeoutInMs =
+          Number.parseInt(response.headers["retry-after"], 10) * 1000;
+
+      return retry(timeoutInMs + randomDelayInMs, retries - 1);
+    }
+    return { ...parseError(response.data), hasError: true };
   }
-
-  return data;
 };
 
 export const createPlaylist = async (token, userId, playlistName) => {
@@ -97,18 +133,48 @@ const fetchTrack = async (token, track) => {
   };
 
   const url = `${SPOTIFY_BASE_URL}/search?${queryString.stringify(param)}`;
+  try {
+    const data = await requestToApi(url, token);
 
-  const data = await requestToApi(url, token);
-
-  if (data.tracks.items.length) return mapToTrackModel(data.tracks.items[0]);
-  return {
-    message: "track not found",
-    hasError: true,
-  };
+    if (data.tracks.items.length) return mapToTrackModel(data.tracks.items[0]);
+    return {
+      message: "track not found",
+      hasError: true,
+    };
+  } catch (e) {
+    return {
+      message: "maybe rate limiter",
+      hasError: true,
+    };
+  }
 };
 
 export const fetchTracks = async (token, tracks) => {
-  return Promise.all(tracks.map((track) => fetchTrack(token, track)));
+  const limit = 100;
+
+  const wait = async (delayInMs) =>
+    new Promise((r) => setTimeout(r, delayInMs));
+
+  const responses = [];
+
+  for (let i = 0; i < tracks.length; i += limit) {
+    const batch = tracks.slice(i, i + limit);
+
+    // eslint-disable-next-line no-await-in-loop
+    const responsesForBatch = await Promise.all(
+      batch.map((t) => fetchTrack(token, t))
+    );
+
+    responses.push(responsesForBatch);
+
+    if (i + limit < tracks.lenght) {
+      const maxOfRandomDelayInMs = 100;
+      // eslint-disable-next-line no-await-in-loop
+      await wait(getRandomInt(maxOfRandomDelayInMs));
+    }
+  }
+
+  return responses.flat();
 };
 
 const mapToUserModel = (spotifyModel) => {

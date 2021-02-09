@@ -11,6 +11,7 @@ import CreatePlaylistForm from "./CreatePlaylistForm";
 
 import "./css/SpotifySongSearch.css";
 import useToken from "./hooks/useToken";
+import UnauthorizedError from "./utils/UnauthorizedError";
 
 const SpotifySongSearch = () => {
   const [responses, setResponses] = useState([]);
@@ -39,7 +40,7 @@ const SpotifySongSearch = () => {
         setIsFetching(false);
         setResponses(trackResponses);
       } catch (e) {
-        onError();
+        if (e instanceof UnauthorizedError) onError();
       }
     },
     [onError]
@@ -51,7 +52,7 @@ const SpotifySongSearch = () => {
   };
 
   useEffect(() => {
-    if (!token) return;
+    if (!token || !userData) return;
 
     const text = getTracks();
     setRawText(text);
