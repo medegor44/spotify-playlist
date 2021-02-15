@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel src/index.html",
-    "build": "npm run linter && parcel build src/index.html --public-url /spotify-playlist",
+    "build": "parcel build src/index.html --public-url /spotify-playlist",
     "test": "jest",
     "linter": "eslint src/*.js*"
   },
