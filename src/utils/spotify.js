@@ -1,4 +1,5 @@
 import queryString from "query-string";
+import axios from "axios";
 import CLIENT_ID from "./constants";
 import UnauthorizedError from "./UnauthorizedError";
 
@@ -26,45 +27,38 @@ const parseError = (data) => {
   return null;
 };
 
-const requestToApi = async (
-  url,
-  token,
-  method = "GET",
-  body = null,
-  retries = 20,
-  timeout = 1000
-) => {
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    method,
-    body,
-  });
+const requestToApi = async (url, token, method = "GET", body = null) => {
+  try {
+    const response = await axios({
+      method,
+      url,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: body,
+    });
 
-  console.log(response);
+    console.log(response.status);
 
-  const data = await response.json();
+    return response.data;
+  } catch (e) {
+    const { response } = e;
+    console.log(response);
 
-  if (response.status >= 400) {
-    if (response.status === 401)
-      throw new UnauthorizedError("User is unauthorized");
-    if (response.status === 429) {
-      if (retries > 0) {
+    if (response.status >= 400) {
+      if (response.status === 401)
+        throw new UnauthorizedError("User is unauthorized");
+      if (response.status === 429) {
         return new Promise((resolve) => {
           setTimeout(
-            () =>
-              resolve(requestToApi(url, token, method, body, retries, timeout)),
-            timeout
+            () => resolve(requestToApi(url, token, method, body)),
+            Number.parseInt(response.headers["retry-after"], 10) * 1000
           );
         });
       }
-
-      return { ...parseError(data), hasError: true };
+      return { ...parseError(response.data), hasError: true };
     }
   }
-
-  return data;
 };
 
 export const createPlaylist = async (token, userId, playlistName) => {
@@ -121,14 +115,12 @@ const fetchTrack = async (token, track) => {
   try {
     const data = await requestToApi(url, token);
 
-    console.log(data);
     if (data.tracks.items.length) return mapToTrackModel(data.tracks.items[0]);
     return {
       message: "track not found",
       hasError: true,
     };
   } catch (e) {
-    console.log(e);
     return {
       message: "maybe rate limiter",
       hasError: true,
@@ -138,16 +130,6 @@ const fetchTrack = async (token, track) => {
 
 export const fetchTracks = async (token, tracks) => {
   return Promise.all(tracks.map((t) => fetchTrack(token, t)));
-
-  const responses = [];
-
-  // eslint-disable-next-line no-restricted-syntax
-  for (const track of tracks) {
-    // eslint-disable-next-line no-await-in-loop
-    responses.push(await fetchTrack(token, track));
-  }
-
-  return responses;
 };
 
 const mapToUserModel = (spotifyModel) => {
