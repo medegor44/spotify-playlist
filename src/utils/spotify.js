@@ -2,6 +2,7 @@ import queryString from "query-string";
 import axios from "axios";
 import CLIENT_ID from "./constants";
 import UnauthorizedError from "./UnauthorizedError";
+import RetriesCountExceededError from "./RetriesCountExceededError";
 
 const SPOTIFY_BASE_URL = "https://api.spotify.com/v1";
 
@@ -27,7 +28,25 @@ const parseError = (data) => {
   return null;
 };
 
-const requestToApi = async (url, token, method = "GET", body = null) => {
+const requestToApi = async (
+  url,
+  token,
+  method = "GET",
+  body = null,
+  retries = 10
+) => {
+  if (retries === 0)
+    throw new RetriesCountExceededError("Count of retries is exceeded");
+
+  const retry = async (timeout, retriesCount = retries) => {
+    return new Promise((resolve) => {
+      setTimeout(
+        () => resolve(requestToApi(url, token, method, body, retriesCount)),
+        timeout
+      );
+    });
+  };
+
   try {
     const response = await axios({
       method,
@@ -38,24 +57,19 @@ const requestToApi = async (url, token, method = "GET", body = null) => {
       data: body,
     });
 
-    console.log(response.status);
-
     return response.data;
   } catch (e) {
     const { response } = e;
-    console.log(response);
 
     if (response.status >= 400) {
       if (response.status === 401)
         throw new UnauthorizedError("User is unauthorized");
       if (response.status === 429) {
-        return new Promise((resolve) => {
-          setTimeout(
-            () => resolve(requestToApi(url, token, method, body)),
-            Number.parseInt(response.headers["retry-after"], 10) * 1000
-          );
-        });
+        const timeout =
+          Number.parseInt(response.headers["retry-after"], 10) * 1000;
+        return retry(timeout);
       }
+      if (response.status === 500) return retry(1000);
       return { ...parseError(response.data), hasError: true };
     }
   }
@@ -129,7 +143,22 @@ const fetchTrack = async (token, track) => {
 };
 
 export const fetchTracks = async (token, tracks) => {
-  return Promise.all(tracks.map((t) => fetchTrack(token, t)));
+  const limit = 100;
+
+  const responses = [];
+
+  for (let i = 0; i < tracks.length; i += limit) {
+    const batch = tracks.slice(i, i + limit);
+
+    // eslint-disable-next-line no-await-in-loop
+    const responsesForBatch = await Promise.all(
+      batch.map((t) => fetchTrack(token, t))
+    );
+
+    responses.push(responsesForBatch);
+  }
+
+  return responses.flat();
 };
 
 const mapToUserModel = (spotifyModel) => {
