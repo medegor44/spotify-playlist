@@ -151,6 +151,8 @@ const fetchTrack = async (token, track) => {
 export const fetchTracks = async (token, tracks) => {
   const limit = 100;
 
+  const wait = async (delay) => new Promise((r) => setTimeout(r, delay));
+
   const responses = [];
 
   for (let i = 0; i < tracks.length; i += limit) {
@@ -162,6 +164,10 @@ export const fetchTracks = async (token, tracks) => {
     );
 
     responses.push(responsesForBatch);
+
+    if (i + limit < tracks.lenght)
+      // eslint-disable-next-line no-await-in-loop
+      await wait(getRandomInt(100));
   }
 
   return responses.flat();
