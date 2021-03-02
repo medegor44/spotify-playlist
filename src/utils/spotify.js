@@ -28,6 +28,9 @@ const parseError = (data) => {
   return null;
 };
 
+const getRandomInt = (maxValue) =>
+  Math.floor(Math.random() * Math.floor(maxValue));
+
 const requestToApi = async (
   url,
   token,
@@ -61,17 +64,20 @@ const requestToApi = async (
   } catch (e) {
     const { response } = e;
 
+    const randomDelay = getRandomInt(500);
+
     if (response.status >= 400) {
       if (response.status === 401)
         throw new UnauthorizedError("User is unauthorized");
       if (response.status === 429) {
         const timeout =
           Number.parseInt(response.headers["retry-after"], 10) * 1000;
-        return retry(timeout);
+        return retry(timeout + randomDelay, retries - 1);
       }
-      if (response.status === 500) return retry(1000);
-      return { ...parseError(response.data), hasError: true };
+      if (response.status === 500)
+        return retry(1000 + randomDelay, retries - 1);
     }
+    return { ...parseError(response.data), hasError: true };
   }
 };
 
