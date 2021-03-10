@@ -64,18 +64,19 @@ const requestToApi = async (
   } catch (e) {
     const { response } = e;
 
-    const randomDelay = getRandomInt(500);
+    const maxOfRandomDelay = 500;
+    const randomDelayInMs = getRandomInt(maxOfRandomDelay);
 
     if (response.status >= 400) {
       if (response.status === 401)
         throw new UnauthorizedError("User is unauthorized");
-      if (response.status === 429) {
-        const timeout =
+
+      let timeoutInMs = 1000;
+      if (response.status === 429)
+        timeoutInMs =
           Number.parseInt(response.headers["retry-after"], 10) * 1000;
-        return retry(timeout + randomDelay, retries - 1);
-      }
-      if (response.status === 500)
-        return retry(1000 + randomDelay, retries - 1);
+
+      return retry(timeoutInMs + randomDelayInMs, retries - 1);
     }
     return { ...parseError(response.data), hasError: true };
   }
@@ -151,7 +152,8 @@ const fetchTrack = async (token, track) => {
 export const fetchTracks = async (token, tracks) => {
   const limit = 100;
 
-  const wait = async (delay) => new Promise((r) => setTimeout(r, delay));
+  const wait = async (delayInMs) =>
+    new Promise((r) => setTimeout(r, delayInMs));
 
   const responses = [];
 
@@ -165,9 +167,11 @@ export const fetchTracks = async (token, tracks) => {
 
     responses.push(responsesForBatch);
 
-    if (i + limit < tracks.lenght)
+    if (i + limit < tracks.lenght) {
+      const maxOfRandomDelayInMs = 100;
       // eslint-disable-next-line no-await-in-loop
-      await wait(getRandomInt(100));
+      await wait(getRandomInt(maxOfRandomDelayInMs));
+    }
   }
 
   return responses.flat();
