@@ -31,7 +31,7 @@ const parseError = (data) => {
 const getRandomInt = (maxValue) =>
   Math.floor(Math.random() * Math.floor(maxValue));
 
-const requestToApi = async (
+export const requestToApi = async (
   url,
   token,
   method = "GET",
