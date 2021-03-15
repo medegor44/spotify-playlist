@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchUser } from "../utils/spotify";
+import UnauthorizedError from "../utils/UnauthorizedError";
 
 const useUserData = (token, onError) => {
   const [userData, setUserData] = useState(null);
@@ -12,7 +13,7 @@ const useUserData = (token, onError) => {
         const data = await fetchUser(token);
         setUserData(data);
       } catch (e) {
-        onError();
+        if (e instanceof UnauthorizedError) onError();
       }
     };
 
