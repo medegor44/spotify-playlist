@@ -36,7 +36,8 @@ export const requestToApi = async (
   token,
   method = "GET",
   body = null,
-  retries = 10
+  retries = 10,
+  retryDelay = 1000
 ) => {
   if (retries === 0)
     throw new RetriesCountExceededError("Count of retries is exceeded");
@@ -44,7 +45,10 @@ export const requestToApi = async (
   const retry = async (timeout, retriesCount = retries) => {
     return new Promise((resolve) => {
       setTimeout(
-        () => resolve(requestToApi(url, token, method, body, retriesCount)),
+        () =>
+          resolve(
+            requestToApi(url, token, method, body, retriesCount, retryDelay)
+          ),
         timeout
       );
     });
@@ -71,7 +75,7 @@ export const requestToApi = async (
       if (response.status === 401)
         throw new UnauthorizedError("User is unauthorized");
 
-      let timeoutInMs = 1000;
+      let timeoutInMs = retryDelay;
       if (response.status === 429)
         timeoutInMs =
           Number.parseInt(response.headers["retry-after"], 10) * 1000;
