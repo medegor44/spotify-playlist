@@ -2,6 +2,8 @@ import axios from "axios";
 import { requestToApi } from "../spotify";
 import RetriesCountExceededError from "../RetriesCountExceededError";
 
+jest.mock("axios");
+
 describe("tests for requestToApi", () => {
   const response = {
     data: "ok",
@@ -55,21 +57,30 @@ describe("tests for requestToApi", () => {
 
     const expected = response.data;
 
-    const actual = await requestToApi("url", "token");
+    const startTime = Date.now();
+
+    const actual = await requestToApi("url", "token", "GET", null, 10, 1000);
+
+    const endTime = Date.now();
 
     expect(actual).toEqual(expected);
     expect(axios.mock.calls.length).toBe(2);
-  }, 2500);
+    expect(endTime - startTime).toBeLessThanOrEqual(2500);
+  });
 
   it("should throw RetriesCountExceededError when too much retries", async () => {
     axios.mockRejectedValue(error500);
 
+    const startTime = Date.now();
     try {
-      await requestToApi("url", "token");
+      await requestToApi("url", "token", "GET", null, 2, 10);
     } catch (e) {
+      const endTime = Date.now();
+
       expect(e).toEqual(
         new RetriesCountExceededError("Count of retries is exceeded")
       );
+      expect(endTime - startTime).toBeLessThanOrEqual(1020);
     }
-  }, 15000);
+  });
 });

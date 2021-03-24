@@ -1,6 +1,8 @@
 import axios from "axios";
 import { fetchTracks } from "../spotify";
 
+jest.mock("axios");
+
 describe("tests for fetchTracks", () => {
   const track = {
     artist: "A",
