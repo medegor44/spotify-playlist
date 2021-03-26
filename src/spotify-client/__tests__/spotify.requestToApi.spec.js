@@ -1,6 +1,6 @@
 import axios from "axios";
 import { requestToApi } from "../spotify";
-import RetriesCountExceededError from "../RetriesCountExceededError";
+import RetriesCountExceededError from "../../errors/RetriesCountExceededError";
 
 jest.mock("axios");
 

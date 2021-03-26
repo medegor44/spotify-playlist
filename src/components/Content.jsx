@@ -1,5 +1,5 @@
 import React from "react";
-import SpotifySongSearch from "./SpotifySongSearch";
+import SearchManager from "./SearchManager";
 
 const Content = () => {
   return (
@@ -14,7 +14,7 @@ const Content = () => {
         </div>
       </section>
       <section id="wrapper">
-        <SpotifySongSearch />
+        <SearchManager />
       </section>
     </>
   );

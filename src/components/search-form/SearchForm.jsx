@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 
-import useToken from "./hooks/useToken";
-import UserContext from "./contexts/UserContext";
+import useToken from "../../hooks/useToken";
+import UserContext from "../../contexts/UserContext";
 
 const SearchForm = ({ handleTracksChange, rawText, handleClick }) => {
   const [token] = useToken();

@@ -1,5 +1,5 @@
 import React from "react";
-import SpotifyLogin from "./SpotifyLogin";
+import Login from "./login/Login";
 
 const Header = () => {
   return (
@@ -8,7 +8,7 @@ const Header = () => {
         <a href="./">spotify playlist</a>
       </h1>
       <nav>
-        <SpotifyLogin />
+        <Login />
       </nav>
     </header>
   );
