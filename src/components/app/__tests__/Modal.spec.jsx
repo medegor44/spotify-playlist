@@ -2,7 +2,7 @@ import React from "react";
 import { shallow } from "enzyme";
 
 import Modal from "../Modal";
-import SpotifyLoginButton from "../SpotifyLoginButton";
+import LoginButton from "../../userSection/LoginButton";
 
 describe("tests for Modal", () => {
   it("renders modal display-block when prop is true", () => {
@@ -33,13 +33,13 @@ describe("tests for Modal", () => {
     const wrapper = shallow(<Modal />);
 
     expect(
-      wrapper.find(".modal").find("section").find(SpotifyLoginButton).length
+      wrapper.find(".modal").find("section").find(LoginButton).length
     ).toBe(1);
   });
 
   it("renders only one login button", () => {
     const wrapper = shallow(<Modal show />);
 
-    expect(wrapper.find(SpotifyLoginButton).length).toBe(1);
+    expect(wrapper.find(LoginButton).length).toBe(1);
   });
 });

@@ -1,12 +1,12 @@
 import React from "react";
 import { shallow } from "enzyme";
 
-import SpotifyLoginButton from "../SpotifyLoginButton";
-import { generateAuthUrl } from "../utils/spotify";
+import LoginButton from "../LoginButton";
+import { generateAuthUrl } from "../../../utils/spotify";
 
 describe("tests for login button", () => {
   it("renders button", () => {
-    const wrapper = shallow(<SpotifyLoginButton />);
+    const wrapper = shallow(<LoginButton />);
     expect(wrapper.find("button").length).toBe(1);
   });
 
@@ -18,7 +18,7 @@ describe("tests for login button", () => {
 
     const expectedUrl = generateAuthUrl(url);
 
-    shallow(<SpotifyLoginButton />)
+    shallow(<LoginButton />)
       .find("button")
       .simulate("click");
 

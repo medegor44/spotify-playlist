@@ -1,14 +1,14 @@
 import React from "react";
-import SpotifyLogin from "./SpotifyLogin";
+import Login from "../userSection/Login";
 
 const Header = () => {
   return (
     <header id="header">
       <h1>
-        <a href="./">spotify playlist</a>
+        <a href="../..">spotify playlist</a>
       </h1>
       <nav>
-        <SpotifyLogin />
+        <Login />
       </nav>
     </header>
   );

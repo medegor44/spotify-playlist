@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import SpotifyLoginButton from "./SpotifyLoginButton";
+import LoginButton from "../userSection/LoginButton";
 
-import "./css/Modal.css";
+import "../../css/Modal.css";
 
 const Modal = ({ show }) => {
   const showHideClassName = show ? "modal display-block" : "modal display-none";
@@ -12,7 +12,7 @@ const Modal = ({ show }) => {
     <div className={showHideClassName}>
       <section className="modal-main">
         <h3>Your session was expired. Please login again</h3>
-        <SpotifyLoginButton />
+        <LoginButton />
       </section>
     </div>
   );

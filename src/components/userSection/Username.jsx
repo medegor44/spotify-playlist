@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
-import UserContext from "./contexts/UserContext";
-import "./css/SpotifyUsername.css";
+import UserContext from "../../contexts/UserContext";
+import "../../css/SpotifyUsername.css";
 
-const SpotifyUsername = () => {
+const Username = () => {
   const [error, setError] = useState("");
   const { userData } = useContext(UserContext);
 
@@ -35,4 +35,4 @@ const SpotifyUsername = () => {
   return <h1>Loading...</h1>;
 };
 
-export default SpotifyUsername;
+export default Username;

@@ -5,13 +5,13 @@ import Header from "./Header";
 import Content from "./Content";
 import Footer from "./Footer";
 import Modal from "./Modal";
-import UserContext from "./contexts/UserContext";
-import useUserData from "./hooks/useUserData";
-import useToken from "./hooks/useToken";
+import UserContext from "../../contexts/UserContext";
+import useUserData from "../../hooks/useUserData";
+import useToken from "../../hooks/useToken";
 
-import "../assets/css/main.css";
-import "./css/App.css";
-import { getAccessTokenFromLocationHash } from "./utils/spotify";
+import "../../../assets/css/main.css";
+import "../../css/App.css";
+import { getAccessTokenFromLocationHash } from "../../utils/spotify";
 
 const redirectToOrigin = () => {
   const currentUrl = window.location.href;
