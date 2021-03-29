@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState, useCallback } from "react";
 import shortid from "shortid";
 
-import { fetchTracks } from "../spotify-client/spotify";
+import { fetchTracks } from "../spotify-client";
 import { setTracks, getTracks } from "../utils/tracksStorage";
 import parseArtistsTracks from "../utils/parser";
 import UserContext from "../contexts/UserContext";

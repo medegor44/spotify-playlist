@@ -11,7 +11,7 @@ import useToken from "../hooks/useToken";
 
 import "../../assets/css/main.css";
 import "../css/App.css";
-import { getAccessTokenFromLocationHash } from "../spotify-client/spotify";
+import { getAccessTokenFromLocationHash } from "../spotify-client";
 
 const redirectToOrigin = () => {
   const currentUrl = window.location.href;

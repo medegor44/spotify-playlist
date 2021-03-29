@@ -10,10 +10,7 @@ import "@testing-library/jest-dom/extend-expect";
 import CreatePlaylistForm from "../CreatePlaylistForm";
 import UserContext from "../../../contexts/UserContext";
 import useToken from "../../../hooks/useToken";
-import {
-  addTracksToPlaylist,
-  createPlaylist,
-} from "../../../spotify-client/spotify";
+import { addTracksToPlaylist, createPlaylist } from "../../../spotify-client";
 import UnauthorizedError from "../../../errors/UnauthorizedError";
 
 jest.mock("../../../hooks/useToken");

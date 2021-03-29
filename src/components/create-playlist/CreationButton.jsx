@@ -1,9 +1,6 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import {
-  addTracksToPlaylist,
-  createPlaylist,
-} from "../../spotify-client/spotify";
+import { addTracksToPlaylist, createPlaylist } from "../../spotify-client";
 import UnauthorizedError from "../../errors/UnauthorizedError";
 import useToken from "../../hooks/useToken";
 import UserContext from "../../contexts/UserContext";

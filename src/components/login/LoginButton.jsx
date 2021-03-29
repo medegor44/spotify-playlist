@@ -1,5 +1,5 @@
 import React from "react";
-import { generateAuthUrl } from "../../spotify-client/spotify";
+import { generateAuthUrl } from "../../spotify-client";
 
 const LoginButton = () => {
   const initiateSpotifyLogin = () => {
