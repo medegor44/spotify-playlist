@@ -2,7 +2,7 @@ import React from "react";
 import { shallow } from "enzyme";
 
 import LoginButton from "../LoginButton";
-import { generateAuthUrl } from "../../../utils/spotify";
+import { generateAuthUrl } from "../../../spotify-client/spotify";
 
 describe("tests for login button", () => {
   it("renders button", () => {

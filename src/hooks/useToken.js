@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { getAccessTokenFromLocationHash } from "../utils/spotify";
+import { getAccessTokenFromLocationHash } from "../spotify-client/spotify";
 import { clearToken, getToken, setToken } from "../utils/tokenStorage";
 
 const useToken = () => {

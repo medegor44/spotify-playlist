@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import "../../../css/CreatePlaylistButton.css";
+import "../../css/CreatePlaylistButton.css";
 import PlaylistNameTextbox from "./PlaylistNameTextbox";
 import CreationButton from "./CreationButton";
-import { responseType } from "../searchResultsSection/ResponsesPropTypes";
+import { responseType } from "../search-results/ResponsesPropTypes";
 
 const CreatePlaylistForm = ({ responses, disabled }) => {
   const [playlistName, setName] = useState("");

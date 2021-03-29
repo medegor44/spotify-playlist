@@ -1,9 +1,12 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import { addTracksToPlaylist, createPlaylist } from "../../../utils/spotify";
-import UnauthorizedError from "../../../utils/UnauthorizedError";
-import useToken from "../../../hooks/useToken";
-import UserContext from "../../../contexts/UserContext";
+import {
+  addTracksToPlaylist,
+  createPlaylist,
+} from "../../spotify-client/spotify";
+import UnauthorizedError from "../../errors/UnauthorizedError";
+import useToken from "../../hooks/useToken";
+import UserContext from "../../contexts/UserContext";
 
 const CreationButton = ({
   playlistName,

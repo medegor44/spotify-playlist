@@ -2,7 +2,7 @@ import React from "react";
 import { shallow } from "enzyme";
 
 import Modal from "../Modal";
-import LoginButton from "../../userSection/LoginButton";
+import LoginButton from "../login/LoginButton";
 
 describe("tests for Modal", () => {
   it("renders modal display-block when prop is true", () => {

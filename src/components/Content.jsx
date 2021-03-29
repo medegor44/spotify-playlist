@@ -1,5 +1,5 @@
 import React from "react";
-import SearchManager from "../contentSection/SearchManager";
+import SearchManager from "./SearchManager";
 
 const Content = () => {
   return (

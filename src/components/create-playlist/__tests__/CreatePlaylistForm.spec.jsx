@@ -8,13 +8,16 @@ import {
 } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import CreatePlaylistForm from "../CreatePlaylistForm";
-import UserContext from "../../../../contexts/UserContext";
-import useToken from "../../../../hooks/useToken";
-import { addTracksToPlaylist, createPlaylist } from "../../../../utils/spotify";
-import UnauthorizedError from "../../../../utils/UnauthorizedError";
+import UserContext from "../../../contexts/UserContext";
+import useToken from "../../../hooks/useToken";
+import {
+  addTracksToPlaylist,
+  createPlaylist,
+} from "../../../spotify-client/spotify";
+import UnauthorizedError from "../../../errors/UnauthorizedError";
 
-jest.mock("../../../../hooks/useToken");
-jest.mock("../../../../utils/spotify");
+jest.mock("../../../hooks/useToken");
+jest.mock("../../../spotify-client/spotify");
 
 const renderWithContext = (ui, { providerProps, ...renderOptions }) => {
   return render(

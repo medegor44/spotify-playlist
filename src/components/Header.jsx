@@ -1,11 +1,11 @@
 import React from "react";
-import Login from "../userSection/Login";
+import Login from "./login/Login";
 
 const Header = () => {
   return (
     <header id="header">
       <h1>
-        <a href="../..">spotify playlist</a>
+        <a href="./">spotify playlist</a>
       </h1>
       <nav>
         <Login />

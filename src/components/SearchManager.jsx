@@ -1,17 +1,17 @@
 import React, { useContext, useEffect, useState, useCallback } from "react";
 import shortid from "shortid";
 
-import { fetchTracks } from "../../utils/spotify";
-import { setTracks, getTracks } from "../../utils/tracksStorage";
-import parseArtistsTracks from "../../utils/parser";
-import UserContext from "../../contexts/UserContext";
-import SearchForm from "./searchSection/SearchForm";
-import ResponsesContainer from "./searchResultsSection/ResponsesContainer";
+import { fetchTracks } from "../spotify-client/spotify";
+import { setTracks, getTracks } from "../utils/tracksStorage";
+import parseArtistsTracks from "../utils/parser";
+import UserContext from "../contexts/UserContext";
+import SearchForm from "./search-form/SearchForm";
+import ResponsesContainer from "./search-results/ResponsesContainer";
 
-import "../../css/SpotifySongSearch.css";
-import useToken from "../../hooks/useToken";
-import UnauthorizedError from "../../utils/UnauthorizedError";
-import CreatePlaylistForm from "./createPlaylistSection/CreatePlaylistForm";
+import "../css/SpotifySongSearch.css";
+import useToken from "../hooks/useToken";
+import UnauthorizedError from "../errors/UnauthorizedError";
+import CreatePlaylistForm from "./create-playlist/CreatePlaylistForm";
 
 const SearchManager = () => {
   const [responses, setResponses] = useState([]);

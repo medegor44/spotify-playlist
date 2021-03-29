@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import LoginButton from "../userSection/LoginButton";
+import LoginButton from "./login/LoginButton";
 
-import "../../css/Modal.css";
+import "../css/Modal.css";
 
 const Modal = ({ show }) => {
   const showHideClassName = show ? "modal display-block" : "modal display-none";

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import UserContext from "../../contexts/UserContext";
 import "../../css/SpotifyUsername.css";
 
-const Username = () => {
+const UserInfo = () => {
   const [error, setError] = useState("");
   const { userData } = useContext(UserContext);
 
@@ -35,4 +35,4 @@ const Username = () => {
   return <h1>Loading...</h1>;
 };
 
-export default Username;
+export default UserInfo;

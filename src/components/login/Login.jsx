@@ -1,13 +1,13 @@
 import React from "react";
 
-import Username from "./Username";
+import UserInfo from "../user-info/UserInfo";
 import LoginButton from "./LoginButton";
 import useToken from "../../hooks/useToken";
 
 const Login = () => {
   const [token] = useToken();
 
-  if (token) return <Username />;
+  if (token) return <UserInfo />;
 
   return <LoginButton />;
 };
