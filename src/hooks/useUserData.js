@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchUser } from "../spotify-client/spotify";
+import { fetchUser } from "../spotify-client";
 import UnauthorizedError from "../errors/UnauthorizedError";
 
 const useUserData = (token, onError) => {

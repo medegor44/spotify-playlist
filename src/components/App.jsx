@@ -8,10 +8,10 @@ import Modal from "./Modal";
 import UserContext from "../contexts/UserContext";
 import useUserData from "../hooks/useUserData";
 import useToken from "../hooks/useToken";
+import { getAccessTokenFromLocationHash } from "../spotify-client";
 
 import "../../assets/css/main.css";
 import "../css/App.css";
-import { getAccessTokenFromLocationHash } from "../spotify-client";
 
 const redirectToOrigin = () => {
   const currentUrl = window.location.href;
@@ -41,7 +41,7 @@ const App = () => {
           <Route path="/">
             <UserContext.Provider value={{ userData, onError }}>
               <Header />
-              <Content />
+              <Content disabled={!token || !userData} />
               <Footer />
               <Modal show={showModal} />
             </UserContext.Provider>

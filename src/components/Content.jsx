@@ -1,7 +1,9 @@
 import React from "react";
-import SearchManager from "./SearchManager";
+import PropTypes from "prop-types";
 
-const Content = () => {
+import SearchWrapper from "./SearchWrapper";
+
+const Content = ({ disabled }) => {
   return (
     <>
       <section id="banner">
@@ -14,10 +16,14 @@ const Content = () => {
         </div>
       </section>
       <section id="wrapper">
-        <SearchManager />
+        <SearchWrapper disabled={disabled} />
       </section>
     </>
   );
+};
+
+Content.propTypes = {
+  disabled: PropTypes.bool,
 };
 
 export default Content;

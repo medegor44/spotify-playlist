@@ -1,42 +1,39 @@
-import React, { useContext } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
-import useToken from "../../hooks/useToken";
-import UserContext from "../../contexts/UserContext";
+import { getTracks } from "../../utils/tracksStorage";
 
-const SearchForm = ({ handleTracksChange, rawText, handleClick }) => {
-  const [token] = useToken();
-  const { userData } = useContext(UserContext);
+const SearchForm = ({ setRawText, rawText, disabled }) => {
+  const handleTracksChange = (event) => {
+    const text = event.target.value;
+    setRawText(text);
+  };
+
+  useEffect(() => {
+    if (disabled) return;
+
+    const text = getTracks();
+    setRawText(text);
+  }, [setRawText, disabled]);
+
   return (
-    <section className="wrapper spotlight style3 ">
-      <div className="inner">
-        <section className="sectionContentContainer">
-          <h3 className="major fullWidthText">Enter track list</h3>
-          <textarea
-            className="searchBox"
-            placeholder='Enter you playlist items in "artist - title" format'
-            onChange={handleTracksChange}
-            value={rawText}
-            disabled={!token || !userData}
-          />
-          <button
-            className="searchButton button primary"
-            type="button"
-            onClick={handleClick}
-            disabled={!token || !userData}
-          >
-            Search
-          </button>
-        </section>
-      </div>
-    </section>
+    <>
+      <h3 className="major fullWidthText">Enter track list</h3>
+      <textarea
+        className="searchBox"
+        placeholder='Enter you playlist items in "artist - title" format'
+        onChange={handleTracksChange}
+        value={rawText}
+        disabled={disabled}
+      />
+    </>
   );
 };
 
 SearchForm.propTypes = {
-  handleTracksChange: PropTypes.func,
+  setRawText: PropTypes.func,
   rawText: PropTypes.string,
-  handleClick: PropTypes.func,
+  disabled: PropTypes.bool,
 };
 
 export default SearchForm;
