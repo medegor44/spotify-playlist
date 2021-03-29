@@ -6,17 +6,13 @@ import { responseType } from "./ResponsesPropTypes";
 
 const ResponsesContainer = ({ isFetching, responses }) => {
   return (
-    <div className="wrapper alt spotlight style2">
-      <div className="inner">
-        <div className="sectionContentContainer">
-          {isFetching ? (
-            <h3 className="fullWidthText">Fetching...</h3>
-          ) : (
-            <ResponsesView responses={responses} />
-          )}
-        </div>
-      </div>
-    </div>
+    <>
+      {isFetching ? (
+        <h3 className="fullWidthText">Fetching...</h3>
+      ) : (
+        <ResponsesView responses={responses} />
+      )}
+    </>
   );
 };
 

@@ -4,7 +4,7 @@ import React from "react";
 import { fromS } from "hh-mm-ss";
 import { responseType, trackType, errorType } from "./ResponsesPropTypes";
 
-import "../../css/TrackView.css";
+import "../../css/ResponsesView.css";
 
 const TrackView = ({ track, idx }) => {
   const durationInSec = Math.floor(track.duration / 1000);

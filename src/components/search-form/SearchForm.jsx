@@ -1,42 +1,80 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import shortid from "shortid";
 
+import TrackInput from "./TrackInput";
+import { getTracks, setTracks } from "../../utils/tracksStorage";
+import parseArtistsTracks from "../../utils/parser";
+import { fetchTracks } from "../../spotify-client";
+import UnauthorizedError from "../../errors/UnauthorizedError";
 import useToken from "../../hooks/useToken";
 import UserContext from "../../contexts/UserContext";
 
-const SearchForm = ({ handleTracksChange, rawText, handleClick }) => {
+import "../../css/SearchForm.css";
+
+const SearchForm = ({ disabled, setIsFetching, setResponses }) => {
+  const [rawText, setRawText] = useState("");
   const [token] = useToken();
-  const { userData } = useContext(UserContext);
+  const { onError } = useContext(UserContext);
+
+  const performRequest = useCallback(
+    async (artistsTracksText, authToken) => {
+      const tracks = parseArtistsTracks(artistsTracksText);
+      setIsFetching(true);
+
+      try {
+        const trackResponses = (await fetchTracks(authToken, tracks)).map(
+          (response, idx) => {
+            return { ...response, id: `${shortid.generate()} ${idx}` };
+          }
+        );
+
+        setIsFetching(false);
+        setResponses(trackResponses);
+      } catch (e) {
+        if (e instanceof UnauthorizedError) onError();
+      }
+    },
+    [onError, setIsFetching, setResponses]
+  );
+
+  const onButtonClick = () => {
+    setTracks(rawText);
+    performRequest(rawText, token);
+  };
+
+  useEffect(() => {
+    if (disabled) return;
+
+    const text = getTracks();
+    setRawText(text);
+
+    performRequest(text, token);
+  }, [disabled, performRequest, token]);
+
   return (
-    <section className="wrapper spotlight style3 ">
-      <div className="inner">
-        <section className="sectionContentContainer">
-          <h3 className="major fullWidthText">Enter track list</h3>
-          <textarea
-            className="searchBox"
-            placeholder='Enter you playlist items in "artist - title" format'
-            onChange={handleTracksChange}
-            value={rawText}
-            disabled={!token || !userData}
-          />
-          <button
-            className="searchButton button primary"
-            type="button"
-            onClick={handleClick}
-            disabled={!token || !userData}
-          >
-            Search
-          </button>
-        </section>
-      </div>
-    </section>
+    <>
+      <TrackInput
+        setRawText={setRawText}
+        rawText={rawText}
+        disabled={disabled}
+      />
+      <button
+        className="searchButton button primary"
+        type="button"
+        onClick={onButtonClick}
+        disabled={disabled}
+      >
+        Search
+      </button>
+    </>
   );
 };
 
 SearchForm.propTypes = {
-  handleTracksChange: PropTypes.func,
-  rawText: PropTypes.string,
-  handleClick: PropTypes.func,
+  disabled: PropTypes.bool,
+  setIsFetching: PropTypes.func,
+  setResponses: PropTypes.func,
 };
 
 export default SearchForm;
