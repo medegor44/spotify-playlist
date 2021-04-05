@@ -1,8 +1,8 @@
 import queryString from "query-string";
 import axios from "axios";
-import CLIENT_ID from "./constants";
-import UnauthorizedError from "./UnauthorizedError";
-import RetriesCountExceededError from "./RetriesCountExceededError";
+import CLIENT_ID from "../utils/constants";
+import UnauthorizedError from "../errors/UnauthorizedError";
+import RetriesCountExceededError from "../errors/RetriesCountExceededError";
 
 const SPOTIFY_BASE_URL = "https://api.spotify.com/v1";
 

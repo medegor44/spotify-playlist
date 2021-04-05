@@ -7,14 +7,14 @@ import {
   act,
 } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import CreatePlaylistButton from "../CreatePlaylistButton";
-import UserContext from "../contexts/UserContext";
-import useToken from "../hooks/useToken";
-import { addTracksToPlaylist, createPlaylist } from "../utils/spotify";
-import UnauthorizedError from "../utils/UnauthorizedError";
+import CreatePlaylistForm from "../CreatePlaylistForm";
+import UserContext from "../../../contexts/UserContext";
+import useToken from "../../../hooks/useToken";
+import { addTracksToPlaylist, createPlaylist } from "../../../spotify-client";
+import UnauthorizedError from "../../../errors/UnauthorizedError";
 
-jest.mock("../hooks/useToken");
-jest.mock("../utils/spotify");
+jest.mock("../../../hooks/useToken");
+jest.mock("../../../spotify-client");
 
 const renderWithContext = (ui, { providerProps, ...renderOptions }) => {
   return render(
@@ -36,6 +36,12 @@ const buildProviderProps = (onError = () => {}) => {
 };
 
 describe("tests for CreatePlaylistButton component", () => {
+  const responses = [
+    {
+      trackUri: "1",
+      hasError: false,
+    },
+  ];
   beforeEach(() => {
     jest.clearAllMocks();
     useToken.mockImplementation(() => ["abc"]);
@@ -44,9 +50,12 @@ describe("tests for CreatePlaylistButton component", () => {
   it("renders not disabled input for playlist name", () => {
     const providerProps = buildProviderProps();
 
-    renderWithContext(<CreatePlaylistButton tracksUris={["1", "2", "3"]} />, {
-      providerProps,
-    });
+    renderWithContext(
+      <CreatePlaylistForm responses={responses} disabled={false} />,
+      {
+        providerProps,
+      }
+    );
 
     expect(screen.getByRole("textbox")).not.toBeDisabled();
   });
@@ -54,9 +63,12 @@ describe("tests for CreatePlaylistButton component", () => {
   it("renders not disabled button", () => {
     const providerProps = buildProviderProps();
 
-    renderWithContext(<CreatePlaylistButton tracksUris={["1", "2", "3"]} />, {
-      providerProps,
-    });
+    renderWithContext(
+      <CreatePlaylistForm responses={responses} disabled={false} />,
+      {
+        providerProps,
+      }
+    );
 
     expect(screen.getByRole("button")).not.toBeDisabled();
   });
@@ -64,9 +76,12 @@ describe("tests for CreatePlaylistButton component", () => {
   it("changes its text", () => {
     const providerProps = buildProviderProps();
 
-    renderWithContext(<CreatePlaylistButton tracksUris={["1", "2", "3"]} />, {
-      providerProps,
-    });
+    renderWithContext(
+      <CreatePlaylistForm responses={responses} disabled={false} />,
+      {
+        providerProps,
+      }
+    );
 
     const expected = "playlist";
 
@@ -83,9 +98,12 @@ describe("tests for CreatePlaylistButton component", () => {
     const providerProps = buildProviderProps();
     createPlaylist.mockResolvedValue({ id: 1111 });
 
-    renderWithContext(<CreatePlaylistButton tracksUris={["1", "2", "3"]} />, {
-      providerProps,
-    });
+    renderWithContext(
+      <CreatePlaylistForm responses={responses} disabled={false} />,
+      {
+        providerProps,
+      }
+    );
 
     act(() => {
       fireEvent.change(screen.getByRole("textbox"), {
@@ -97,11 +115,7 @@ describe("tests for CreatePlaylistButton component", () => {
     await waitFor(async () => {
       expect(createPlaylist.mock.calls.length).toBe(1);
       expect(addTracksToPlaylist.mock.calls.length).toBe(1);
-      expect(addTracksToPlaylist.mock.calls[0]).toEqual([
-        "abc",
-        1111,
-        ["1", "2", "3"],
-      ]);
+      expect(addTracksToPlaylist.mock.calls[0]).toEqual(["abc", 1111, ["1"]]);
     });
   });
 
@@ -111,9 +125,12 @@ describe("tests for CreatePlaylistButton component", () => {
     createPlaylist.mockResolvedValue({ id: 1111 });
     addTracksToPlaylist.mockRejectedValue(new UnauthorizedError(""));
 
-    renderWithContext(<CreatePlaylistButton tracksUris={["1", "2", "3"]} />, {
-      providerProps,
-    });
+    renderWithContext(
+      <CreatePlaylistForm responses={responses} disabled={false} />,
+      {
+        providerProps,
+      }
+    );
 
     act(() => {
       const expected = "playlist";

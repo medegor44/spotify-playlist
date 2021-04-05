@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchUser } from "../utils/spotify";
-import UnauthorizedError from "../utils/UnauthorizedError";
+import { fetchUser } from "../spotify-client";
+import UnauthorizedError from "../errors/UnauthorizedError";
 
 const useUserData = (token, onError) => {
   const [userData, setUserData] = useState(null);

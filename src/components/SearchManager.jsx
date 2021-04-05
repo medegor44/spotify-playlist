@@ -1,19 +1,19 @@
 import React, { useContext, useEffect, useState, useCallback } from "react";
 import shortid from "shortid";
 
-import { fetchTracks } from "./utils/spotify";
-import { setTracks, getTracks } from "./utils/tracksStorage";
-import parseArtistsTracks from "./utils/parser";
-import UserContext from "./contexts/UserContext";
-import SearchForm from "./SearchForm";
-import ResponsesContainer from "./ResponsesContainer";
-import CreatePlaylistForm from "./CreatePlaylistForm";
+import { fetchTracks } from "../spotify-client";
+import { setTracks, getTracks } from "../utils/tracksStorage";
+import parseArtistsTracks from "../utils/parser";
+import UserContext from "../contexts/UserContext";
+import SearchForm from "./search-form/SearchForm";
+import ResponsesContainer from "./search-results/ResponsesContainer";
 
-import "./css/SpotifySongSearch.css";
-import useToken from "./hooks/useToken";
-import UnauthorizedError from "./utils/UnauthorizedError";
+import "../css/SpotifySongSearch.css";
+import useToken from "../hooks/useToken";
+import UnauthorizedError from "../errors/UnauthorizedError";
+import CreatePlaylistForm from "./create-playlist/CreatePlaylistForm";
 
-const SpotifySongSearch = () => {
+const SearchManager = () => {
   const [responses, setResponses] = useState([]);
   const [rawText, setRawText] = useState("");
   const [isFetching, setIsFetching] = useState(false);
@@ -67,9 +67,9 @@ const SpotifySongSearch = () => {
         rawText={rawText}
       />
       <ResponsesContainer isFetching={isFetching} responses={responses} />
-      <CreatePlaylistForm responses={responses} />
+      <CreatePlaylistForm responses={responses} disabled={!token} />
     </>
   );
 };
 
-export default SpotifySongSearch;
+export default SearchManager;
