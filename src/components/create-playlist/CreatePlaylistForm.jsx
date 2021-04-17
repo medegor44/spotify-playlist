@@ -1,41 +1,58 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
-import "../../css/CreatePlaylistButton.css";
+
 import PlaylistNameTextbox from "./PlaylistNameTextbox";
-import CreationButton from "./CreationButton";
 import { responseType } from "../search-results/ResponsesPropTypes";
+import { addTracksToPlaylist, createPlaylist } from "../../spotify-client";
+import UnauthorizedError from "../../errors/UnauthorizedError";
+import useToken from "../../hooks/useToken";
+import UserContext from "../../contexts/UserContext";
+
+import "../../css/CreatePlaylistForm.css";
 
 const CreatePlaylistForm = ({ responses, disabled }) => {
   const [playlistName, setName] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [token] = useToken();
+  const { userData, onError: onUnauthorizedError } = useContext(UserContext);
 
   const uris = responses
     .filter((response) => !response.hasError)
     .map((track) => track.trackUri);
 
-  return (
-    <div className="wrapper spotlight style3">
-      <div className="inner">
-        <div className="sectionContentContainer createPlaylist">
-          <h3 className="major fullWidthText">Generate playlist</h3>
+  const onButtonClick = async () => {
+    try {
+      const data = await createPlaylist(token, userData.id, playlistName);
+      const playlistId = data.id;
 
-          <PlaylistNameTextbox
-            disabled={disabled}
-            name={playlistName}
-            setName={setName}
-          />
-          <CreationButton
-            tracksUris={uris}
-            playlistName={playlistName}
-            setError={setError}
-            setSuccess={setSuccess}
-            disabled={disabled}
-          />
-          <Message error={error} success={success} />
-        </div>
-      </div>
-    </div>
+      await addTracksToPlaylist(token, playlistId, uris);
+
+      setSuccess(`${playlistName} created`);
+    } catch (e) {
+      if (e instanceof UnauthorizedError) onUnauthorizedError();
+      else setError(e.message);
+    }
+  };
+
+  return (
+    <>
+      <h3 className="major fullWidthText">Generate playlist</h3>
+      <PlaylistNameTextbox
+        disabled={disabled}
+        name={playlistName}
+        setName={setName}
+      />
+      <button
+        className="playlistButton button primary"
+        type="button"
+        onClick={onButtonClick}
+        disabled={disabled}
+      >
+        Create playlist
+      </button>
+      <Message error={error} success={success} />
+    </>
   );
 };
 

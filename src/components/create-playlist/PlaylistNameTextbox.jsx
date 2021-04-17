@@ -3,18 +3,16 @@ import PropTypes from "prop-types";
 
 const PlaylistNameTextbox = ({ disabled, name, setName }) => {
   return (
-    <>
-      <input
-        type="text"
-        className="playlistName"
-        placeholder="Enter playlist name"
-        value={name}
-        onChange={(e) => {
-          setName(e.target.value);
-        }}
-        disabled={disabled}
-      />
-    </>
+    <input
+      type="text"
+      className="playlistName"
+      placeholder="Enter playlist name"
+      value={name}
+      onChange={(e) => {
+        setName(e.target.value);
+      }}
+      disabled={disabled}
+    />
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import UserContext from "../../contexts/UserContext";
-import "../../css/SpotifyUsername.css";
+import "../../css/UserInfo.css";
 
 const UserInfo = () => {
   const [error, setError] = useState("");

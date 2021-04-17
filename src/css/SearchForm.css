@@ -1,0 +1,11 @@
+.trackInput {
+    width: 100%;
+    height: 20em;
+    resize: none;
+}
+
+.searchButton {
+    width: 50%;
+    margin-top: 1em;
+}
+
