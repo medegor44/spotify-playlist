@@ -1,7 +1,7 @@
 # Spotify playlist generator
 
 This is the simple react app which connects to your spotify account and allows you to generate playlists.
-You can try it out [here]([here](https://medegor44.github.io/spotify-playlist/)). Just log in to your Spotify
+You can try it out [here](https://medegor44.github.io/spotify-playlist/). Just log in to your Spotify
 account, search tracks and create playlist from them.
 
 # Development
